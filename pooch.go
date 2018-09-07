@@ -23,27 +23,11 @@ import (
 var cookieHandler = securecookie.New(securecookie.GenerateRandomKey(64), securecookie.GenerateRandomKey(32))
 var router = mux.NewRouter()
 
-/*
-    index_handler:  handles the index page of the web app
-
-    params:         w - webpage writer
-                    r - request getter
-
-    returns:        void
-*/
 func index_handler(w http.ResponseWriter, r *http.Request) {
     t, _ := template.ParseFiles("html/index.html")
     t.Execute(w, nil)
 }
 
-/*
-    admin_handler:  handles the admin page of the webapp
-
-    params:         w - webpage writer
-                    r - request getter
-
-    returns:        void
-*/
 func admin_handler(w http.ResponseWriter, r *http.Request) {
     u, _ := mgopooch.GetUser(get_username(r))
     if u.Type == "admin" {
@@ -54,14 +38,22 @@ func admin_handler(w http.ResponseWriter, r *http.Request) {
     }
 }
 
-/*
-    login_handler:  handles login requests
+func admin_rooms_handler(w http.ResponseWriter, r *http.Request) {
 
-    params:         w - webpage writer
-                    r - request getter
+}
 
-    returns:        void
-*/
+func admin_groups_handler(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func admin_createuser_handler(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func admin_removeuser_handler(w http.ResponseWriter, r *http.Request) {
+
+}
+
 func login_handler(w http.ResponseWriter, r *http.Request) {
     username := r.FormValue("username")
     password := r.FormValue("password")
@@ -84,27 +76,11 @@ func login_handler(w http.ResponseWriter, r *http.Request) {
     http.Redirect(w, r, redirect_target, 302)
 }
 
-/*
-    logout_handler:  handles logout requests
-
-    params:         w - webpage writer
-                    r - request getter
-
-    returns:        void
-*/
 func logout_handler(w http.ResponseWriter, r *http.Request) {
     clear_session(w)
     http.Redirect(w, r, "/", 302)
 }
 
-/*
-    set_session:    sets the user session for the webapp when logging in
-
-    params:         username - username of person logging in
-                    w - webpage writer
-
-    returns:        void
-*/
 func set_session(username string, w http.ResponseWriter) {
     value := map[string]string{
         "name": username,
@@ -119,13 +95,6 @@ func set_session(username string, w http.ResponseWriter) {
     }
 }
 
-/*
-    get_username:   gets username from cookie/session of user logging in
-
-    params:         r - request getter
-
-    returns:        username - username of whoever is in the current session
-*/
 func get_username(r *http.Request) (username string) {
     if cookie, err := r.Cookie("session"); err == nil {
         cookieValue := make(map[string]string)
@@ -136,13 +105,6 @@ func get_username(r *http.Request) (username string) {
     return username
 }
 
-/*
-    clear_session:  used to log users out of a session
-
-    params:         w - webpage writer
-
-    returns:        void
-*/
 func clear_session(w http.ResponseWriter) {
     cookie := &http.Cookie{
         Name:   "session",
