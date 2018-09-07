@@ -35,11 +35,11 @@
             <div id="userop">
                 <h4>Create User</h4>
                 <form action="/admin/createuser" method="post">
-                    <input type="text" name="username" placeholder="username"><br>
+                    <input type="text" name="mkusername" placeholder="username"><br>
                     <input type="password" name="password" placeholder="password"><br>
                     <input type="text" name="fname" placeholder="firstname"><br>
-                    <input type="text" name="fname" placeholder="lastname"><br>
-                    <select dir="rtl">
+                    <input type="text" name="lname" placeholder="lastname"><br>
+                    <select name="acctype" dir="rtl">
                         <option value="">Choose Type</option>
                         <option value="admin">Admin</option>
                         <option value="reg">Regular</option>
@@ -51,7 +51,7 @@
             <div id="userop">
                 <h4>Remove User</h4>
                 <form action="/admin/removeuser" method="post">
-                    <input type="text" name="username" placeholder="username"><br>
+                    <input type="text" name="rmusername" placeholder="username"><br>
                     <input type="submit" value="Submit"><br>
                 </form>
             </div>

@@ -53,3 +53,21 @@ func IsPassValid(password string, user *User) bool {
     }
     return true
 }
+
+func InsertUser(user *User) error {
+    hash, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+    user.Password = string(hash)
+    err := DB.C("users").Insert(&user)
+    if err != nil {
+        return err
+    }
+    return nil
+}
+
+func RemoveUser(username string) error {
+    err := DB.C("users").Remove(bson.M{"username":username})
+    if err != nil {
+        return err
+    }
+    return nil
+}

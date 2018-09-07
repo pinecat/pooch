@@ -38,20 +38,51 @@ func admin_handler(w http.ResponseWriter, r *http.Request) {
     }
 }
 
+/*
 func admin_rooms_handler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+
 func admin_groups_handler(w http.ResponseWriter, r *http.Request) {
 
 }
+*/
 
 func admin_createuser_handler(w http.ResponseWriter, r *http.Request) {
+    u, _ := mgopooch.GetUser(get_username(r))
+    if u.Type != "admin" {
+        http.Redirect(w, r, "/", 302)
+        return
+    }
 
+    username := r.FormValue("mkusername")
+    password := r.FormValue("password")
+    fname := r.FormValue("fname")
+    lname := r.FormValue("lname")
+    acc := r.FormValue("acctype")
+
+    u = mgopooch.User{Username:username, Password:password, Fname:fname, Lname:lname, Type:acc}
+    mgopooch.InsertUser(&u)
+
+    http.Redirect(w, r, "/admin", 302)
 }
 
 func admin_removeuser_handler(w http.ResponseWriter, r *http.Request) {
+    u, _ := mgopooch.GetUser(get_username(r))
+    if u.Type != "admin" {
+        http.Redirect(w, r, "/", 302)
+        return
+    }
 
+    username := r.FormValue("rmusername")
+    if username == u.Username {
+        http.Redirect(w, r, "/admin", 302)
+        return
+    }
+    mgopooch.RemoveUser(username)
+
+    http.Redirect(w, r, "/admin", 302)
 }
 
 func login_handler(w http.ResponseWriter, r *http.Request) {
@@ -127,6 +158,8 @@ func main() {
 
     router.HandleFunc("/", index_handler) // handle the index page
     router.HandleFunc("/admin", admin_handler) // handle the admin page
+    router.HandleFunc("/admin/createuser", admin_createuser_handler)
+    router.HandleFunc("/admin/removeuser", admin_removeuser_handler)
 
     router.HandleFunc("/login", login_handler).Methods("POST")
     router.HandleFunc("/logout", logout_handler).Methods("POST")
