@@ -1,16 +1,31 @@
 <!DOCTYPE html>
 
 <head>
-    <title>pooch</title>
+    <title>Pooch</title>
+    <link rel="stylesheet" type="text/css" href="http://192.168.200.132:8080/public/css/index.css"/>
 </head>
 
 <body>
-    <h1>pooch</h1>
-    <h3>the friendly podium check helper</h3>
+    <div id="header">
+        <img src="http://192.168.200.132:8080/public/img/corgo.png" alt="pooch" style="width:150px;height:120px;">
 
-    <form action="/login" method="post">
+        <div id="heading">
+            <h1>Pooch</h1>
+            <h3>The friendly podium check helper!</h3>
+        </div>
+    </div>
+
+    <div id="content">
+        <form action="/login" method="post">
             <input type="text" name="username" placeholder="username"><br>
             <input type="password" name="password" placeholder="password"><br>
-            <input type="submit" value="login">
-    </form>
+            <input type="submit" value="Login">
+        </form>
+    </div>
+
+    <div id="footer">
+        <p class="github"><a href="https://github.com/pinecat/pooch">Github</a></p>
+        <p class="contact"><a href="mailto:dudleyr1@etown.edu">dudleyr1@etown.edu</a><br>Rory Dudley<br>pinecat</p>
+        <p class ="copyright">Copyright &copy; Rory Dudley (aka pinecat)</p>
+    </div>
 </body>

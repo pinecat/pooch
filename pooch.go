@@ -66,14 +66,16 @@ func login_handler(w http.ResponseWriter, r *http.Request) {
     username := r.FormValue("username")
     password := r.FormValue("password")
     redirect_target := "/"
-    if username != "" && password != "" {
-        // .. check credentials ..
+    if username != "" && password != "" { // if the username and password are not blank
+        // check credentials....
 
+        // get user and check if they exist (err is nil if user exists)
         u, err := mgopooch.GetUser(username)
         if err != nil {
             http.Redirect(w, r, redirect_target, 302)
         }
 
+        // make sure the password matches the hash in database
         if mgopooch.IsPassValid(password, &u) == true {
             set_session(username, w)
             redirect_target = "/admin"
@@ -168,6 +170,8 @@ func main() {
     router.HandleFunc("/logout", logout_handler).Methods("POST")
 
     http.Handle("/", router)
-    fmt.Println("pooch web server running on port 8080....")
+    http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
+
+    fmt.Println("Pooch web server running on port 8080....")
     http.ListenAndServe(":8080", nil) // start the webapp on port 8080
 }

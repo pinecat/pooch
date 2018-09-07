@@ -1,6 +1,17 @@
-<h1>Admin</h1>
-<hr>
-<small>User: {{ .Username }}</small>
-<form method="post" action="/logout">
-    <button type="submit">Logout</button>
-</form>
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>pooch admin</title>
+        <link rel="stylesheet" type="text/css" href="css/admin.css" />
+    </head>
+
+    <body>
+        <h1>pooch admin</h1>
+        <hr>
+        <small>Welcome {{ .Fname }} {{ .Lname }}!</small>
+        <form method="post" action="/logout">
+            <button type="submit">Logout</button>
+        </form>
+    </body>
+</html>
