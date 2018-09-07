@@ -1,0 +1,22 @@
+insert({
+	username:"dudleyr1@etown.edu",
+	password:"$2a$10$CUdv6XjblBWMywz67myJ7.YJEK0b092UNFc3nRgIbkwXc/uO3.PU2",
+	fname:"Rory",
+	lname:"Dudley",
+	type:"admin"
+})
+
+insert({
+	username:"dudleyr1@etown.edu",
+	fname:"Rory",
+	lname:"Dudley",
+	type:"admin"
+})
+
+db.createUser(
+   {
+     user: "pooch",
+     pwd: "pooch",
+     roles: [ "readWrite", "dbAdmin" ]
+   }
+)

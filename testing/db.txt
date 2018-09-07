@@ -1,0 +1,17 @@
+// mongo, _ := mongo.Connect(context.Background(), "mongodb://pooch:pooch@localhost:27017", nil) // open mongodb session
+// db := mongo.Database("pooch") // use the pooch database
+// _ = db
+
+mango, err := mgo.Dial("127.0.0.1") // mongodb://pooch:pooch@localhost:27017
+if err != nil {
+    log.Fatal(err)
+}
+_ = mango
+defer mango.Close()
+
+db := mango.DB("pooch")
+db.Login("pooch", "pooch")
+c := db.C("users")
+result := User{}
+c.Find(bson.M{"username":"dudleyr1@etown.edu"}).One(&result)
+fmt.Println(result.Username,"\n",result.Password,"\n",result.Fname,"\n",result.Lname,"\n",result.Type)
