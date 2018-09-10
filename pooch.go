@@ -13,152 +13,13 @@ import (
     "fmt" // for printing out text
     _"log" // for logging errors
     "net/http" // for hosting webapp server
-    "html/template" // for setting up html files
-    "github.com/gorilla/mux" // for handling webapp functions
-    "github.com/gorilla/securecookie" // for handling session info and security
+    "github.com/gorilla/mux" // gorilla mux router for handling funcs
     "pooch/mgopooch"
+    "pooch/handle"
 )
 
 /* globals */
-var cookieHandler = securecookie.New(securecookie.GenerateRandomKey(64), securecookie.GenerateRandomKey(32))
 var router = mux.NewRouter()
-
-func index_handler(w http.ResponseWriter, r *http.Request) {
-    t, _ := template.ParseFiles("html/index.html")
-    t.Execute(w, nil)
-}
-
-func admin_handler(w http.ResponseWriter, r *http.Request) {
-    u, _ := mgopooch.GetUser(get_username(r))
-    if u.Type == "admin" {
-        t, _ := template.ParseFiles("html/admin.html")
-        t.Execute(w, u)
-    } else {
-        http.Redirect(w, r, "/", 302)
-    }
-}
-
-
-func admin_rooms_handler(w http.ResponseWriter, r *http.Request) {
-    u, _ := mgopooch.GetUser(get_username(r))
-    if u.Type != "admin" {
-        http.Redirect(w, r, "/", 302)
-        return
-    }
-
-    t, _ := template.ParseFiles("html/rooms.html")
-    t.Execute(w, u)
-}
-
-
-func admin_groups_handler(w http.ResponseWriter, r *http.Request) {
-    u, _ := mgopooch.GetUser(get_username(r))
-    if u.Type != "admin" {
-        http.Redirect(w, r, "/", 302)
-        return
-    }
-
-    t, _ := template.ParseFiles("html/groups.html")
-    t.Execute(w, u)
-}
-
-
-func admin_createuser_handler(w http.ResponseWriter, r *http.Request) {
-    u, _ := mgopooch.GetUser(get_username(r))
-    if u.Type != "admin" {
-        http.Redirect(w, r, "/", 302)
-        return
-    }
-
-    username := r.FormValue("mkusername")
-    password := r.FormValue("password")
-    fname := r.FormValue("fname")
-    lname := r.FormValue("lname")
-    acc := r.FormValue("acctype")
-
-    u = mgopooch.User{Username:username, Password:password, Fname:fname, Lname:lname, Type:acc}
-    mgopooch.InsertUser(&u)
-
-    http.Redirect(w, r, "/admin", 302)
-}
-
-func admin_removeuser_handler(w http.ResponseWriter, r *http.Request) {
-    u, _ := mgopooch.GetUser(get_username(r))
-    if u.Type != "admin" {
-        http.Redirect(w, r, "/", 302)
-        return
-    }
-
-    username := r.FormValue("rmusername")
-    if username == u.Username {
-        http.Redirect(w, r, "/admin", 302)
-        return
-    }
-    mgopooch.RemoveUser(username)
-
-    http.Redirect(w, r, "/admin", 302)
-}
-
-func login_handler(w http.ResponseWriter, r *http.Request) {
-    username := r.FormValue("username")
-    password := r.FormValue("password")
-    redirect_target := "/"
-    if username != "" && password != "" { // if the username and password are not blank
-        // check credentials....
-
-        // get user and check if they exist (err is nil if user exists)
-        u, err := mgopooch.GetUser(username)
-        if err != nil {
-            http.Redirect(w, r, redirect_target, 302)
-        }
-
-        // make sure the password matches the hash in database
-        if mgopooch.IsPassValid(password, &u) == true {
-            set_session(username, w)
-            redirect_target = "/admin"
-        }
-    }
-    http.Redirect(w, r, redirect_target, 302)
-}
-
-func logout_handler(w http.ResponseWriter, r *http.Request) {
-    clear_session(w)
-    http.Redirect(w, r, "/", 302)
-}
-
-func set_session(username string, w http.ResponseWriter) {
-    value := map[string]string{
-        "name": username,
-    }
-    if encoded, err := cookieHandler.Encode("session", value); err == nil {
-        cookie := &http.Cookie{
-            Name:  "session",
-            Value: encoded,
-            Path:  "/",
-        }
-        http.SetCookie(w, cookie)
-    }
-}
-
-func get_username(r *http.Request) (username string) {
-    if cookie, err := r.Cookie("session"); err == nil {
-        cookieValue := make(map[string]string)
-        if err = cookieHandler.Decode("session", cookie.Value, &cookieValue); err == nil {
-            username = cookieValue["name"]
-        }
-    }
-    return username
-}
-
-func clear_session(w http.ResponseWriter) {
-    cookie := &http.Cookie{
-        Name:   "session",
-        Value:  "",
-        Path:   "/",
-        MaxAge: -1,
-    }
-    http.SetCookie(w, cookie)
-}
 
 /*
     main:       main function of the program
@@ -170,16 +31,16 @@ func clear_session(w http.ResponseWriter) {
 func main() {
     mgopooch.SetupSession()
 
-    router.HandleFunc("/", index_handler) // handle the index page
-    router.HandleFunc("/admin", admin_handler) // handle the admin page
-    router.HandleFunc("/admin/createuser", admin_createuser_handler)
-    router.HandleFunc("/admin/removeuser", admin_removeuser_handler)
+    router.HandleFunc("/", handle.IndexHandler) // handle the index page
+    router.HandleFunc("/admin", handle.AdminHandler) // handle the admin page
+    router.HandleFunc("/admin/createuser", handle.AdminCreateuserHandler)
+    router.HandleFunc("/admin/removeuser", handle.AdminRemoveuserHandler)
 
-    router.HandleFunc("/admin/rooms", admin_rooms_handler)
-    router.HandleFunc("/admin/groups", admin_groups_handler)
+    router.HandleFunc("/admin/rooms", handle.AdminRoomsHandler)
+    router.HandleFunc("/admin/groups", handle.AdminGroupsHandler)
 
-    router.HandleFunc("/login", login_handler).Methods("POST")
-    router.HandleFunc("/logout", logout_handler).Methods("POST")
+    router.HandleFunc("/login", handle.LoginHandler).Methods("POST")
+    router.HandleFunc("/logout", handle.LogoutHandler).Methods("POST")
 
     http.Handle("/", router)
     http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
