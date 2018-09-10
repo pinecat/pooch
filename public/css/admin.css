@@ -45,6 +45,10 @@ h1 {
     background-color: #70551d;
 }
 
+#header #accop form {
+    display: inline;
+}
+
 #content {
     width: 100%;
     margin-left: auto;

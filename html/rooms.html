@@ -4,7 +4,7 @@
     <head>
         <title>Pooch</title>
         <link rel="icon" type="image/png" href="http://192.168.200.132:8080/public/img/corgo.png"/>
-        <link rel="stylesheet" type="text/css" href="http://192.168.200.132:8080/public/css/index.css"/>
+        <link rel="stylesheet" type="text/css" href="http://192.168.200.132:8080/public/css/rooms.css"/>
     </head>
 
     <body>
@@ -12,18 +12,23 @@
             <img src="http://192.168.200.132:8080/public/img/corgo.png" alt="pooch" style="width:150px;height:120px;">
 
             <div id="heading">
-                <h1>Pooch</h1>
-                <h3>The friendly podium check helper!</h3>
+                <h1>Pooch Admin</h1>
+                <h3>Rooms View</h3>
+            </div>
+
+            <div id="accop">
+                Welcome {{ .Fname }} {{ .Lname }}!<br>
+                <form action="/admin" method="post">
+                    <button type="submit">Admin</button>
+                </form>
+                <form action="/logout" method="post">
+                    <button type="submit">Logout</button>
+                </form>
             </div>
         </div>
-
-        <div id="content">
-            <form action="/login" method="post">
-                <input type="text" name="username" placeholder="username/email"><br>
-                <input type="password" name="password" placeholder="password"><br>
-                <input type="submit" value="Login">
-            </form>
         </div>
+
+
 
         <div id="footer">
             <p class="github"><a href="https://github.com/pinecat/pooch">Github</a></p>

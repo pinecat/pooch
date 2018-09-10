@@ -38,16 +38,30 @@ func admin_handler(w http.ResponseWriter, r *http.Request) {
     }
 }
 
-/*
-func admin_rooms_handler(w http.ResponseWriter, r *http.Request) {
 
+func admin_rooms_handler(w http.ResponseWriter, r *http.Request) {
+    u, _ := mgopooch.GetUser(get_username(r))
+    if u.Type != "admin" {
+        http.Redirect(w, r, "/", 302)
+        return
+    }
+
+    t, _ := template.ParseFiles("html/rooms.html")
+    t.Execute(w, u)
 }
 
 
 func admin_groups_handler(w http.ResponseWriter, r *http.Request) {
+    u, _ := mgopooch.GetUser(get_username(r))
+    if u.Type != "admin" {
+        http.Redirect(w, r, "/", 302)
+        return
+    }
 
+    t, _ := template.ParseFiles("html/groups.html")
+    t.Execute(w, u)
 }
-*/
+
 
 func admin_createuser_handler(w http.ResponseWriter, r *http.Request) {
     u, _ := mgopooch.GetUser(get_username(r))
@@ -160,6 +174,9 @@ func main() {
     router.HandleFunc("/admin", admin_handler) // handle the admin page
     router.HandleFunc("/admin/createuser", admin_createuser_handler)
     router.HandleFunc("/admin/removeuser", admin_removeuser_handler)
+
+    router.HandleFunc("/admin/rooms", admin_rooms_handler)
+    router.HandleFunc("/admin/groups", admin_groups_handler)
 
     router.HandleFunc("/login", login_handler).Methods("POST")
     router.HandleFunc("/logout", logout_handler).Methods("POST")
