@@ -20,6 +20,18 @@ type User struct {
     Type        string
 }
 
+type Building struct {
+    ID      bson.ObjectId `bson:"_id,omitempty"`
+    Name    string
+    Rooms   map[string]Room
+    Abrv    string
+}
+
+type Room struct {
+    Status  string
+    Group   int
+}
+
 /* globals */
 var (
     Session *mgo.Session

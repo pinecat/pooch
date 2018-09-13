@@ -15,3 +15,14 @@ c := db.C("users")
 result := User{}
 c.Find(bson.M{"username":"dudleyr1@etown.edu"}).One(&result)
 fmt.Println(result.Username,"\n",result.Password,"\n",result.Fname,"\n",result.Lname,"\n",result.Type)
+
+--------------------------------------------
+
+c := mgopooch.DB.C("buildings")
+result := mgopooch.Building{}
+c.Find(bson.M{"name":"Nicarry"}).One(&result)
+fmt.Println(result.Name)
+fmt.Println(result.Abrv)
+for name, room := range result.Rooms {
+    fmt.Printf(name + ": {\n\tstatus: " + room.Status + "\n\tgroup: %v\n}\n", room.Group)
+}

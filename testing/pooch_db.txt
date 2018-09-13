@@ -20,3 +20,36 @@ db.createUser(
      roles: [ "readWrite", "dbAdmin" ]
    }
 )
+
+--------------------------------------------------------------------------------------------
+
+insert({
+	"name": "Nicarry",
+	"rooms": {
+		"101": {
+			"status": "unchecked",
+			"group": 0
+		},
+		"104": {
+			"status": "unchecked",
+			"group": 0
+		},
+		"106": {
+			"status": "unchecked",
+			"group": 0
+		},
+		"127": {
+			"status": "unchecked",
+			"group": 0
+		},
+		"129": {
+			"status": "unchecked",
+			"group": 0
+		},
+		"131": {
+			"status": "unchecked",
+			"group": 0
+		}
+	},
+	"abrv": "N"
+})
