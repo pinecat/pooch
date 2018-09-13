@@ -3,14 +3,20 @@ package handle
 
 /* imports */
 import (
+    _"fmt"
     "net/http"
     "html/template" // for setting up html files
     "github.com/gorilla/securecookie" // for handling session info and security
     "pooch/mgopooch"
+    "github.com/gorilla/websocket"
 )
 
 /* gloabals */
 var cookieHandler = securecookie.New(securecookie.GenerateRandomKey(64), securecookie.GenerateRandomKey(32))
+var upgrader = websocket.Upgrader {
+    ReadBufferSize:  1024,
+    WriteBufferSize: 1024,
+}
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
     t, _ := template.ParseFiles("html/index.html")
@@ -26,7 +32,6 @@ func AdminHandler(w http.ResponseWriter, r *http.Request) {
         http.Redirect(w, r, "/", 302)
     }
 }
-
 
 func AdminRoomsHandler(w http.ResponseWriter, r *http.Request) {
     u, _ := mgopooch.GetUser(get_username(r))

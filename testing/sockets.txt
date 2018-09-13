@@ -1,0 +1,20 @@
+var ws = new WebSocket("ws://192.168.200.132:8080/admin/rooms")
+
+ws.addEventListener("message", function(e) {console.log(e);})
+
+ws.send("foo")
+
+
+
+var upgrader = websocket.Upgrader{
+    ReadBufferSize:  1024,
+    WriteBufferSize: 1024,
+}
+
+func Upgrade(w http.ResponseWriter, r *http.Request) (*Conn, error) {
+    conn, err := upgrader.upgrade(w, r, nil)
+    if err != nil {
+        return err
+    }
+    return conn
+}

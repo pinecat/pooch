@@ -16,7 +16,7 @@ import (
     "github.com/gorilla/mux" // gorilla mux router for handling funcs
     "pooch/mgopooch"
     "pooch/handle"
-    "labix.org/v2/mgo/bson"
+    _"labix.org/v2/mgo/bson"
 )
 
 /* globals */
