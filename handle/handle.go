@@ -3,11 +3,13 @@ package handle
 
 /* imports */
 import (
+    _"fmt"
     "net/http"
     "html/template" // for setting up html files
     "github.com/gorilla/securecookie" // for handling session info and security
     "github.com/pinecat/pooch/mgopooch"
     "github.com/gorilla/websocket"
+    "github.com/pinecat/pooch/confrdr"
 )
 
 /* gloabals */
@@ -17,19 +19,31 @@ var upgrader = websocket.Upgrader {
     WriteBufferSize: 1024,
 }
 
+/* structs */
+type PageData struct {
+    IP          string
+    Port        string
+    UserData    mgopooch.User
+    BdngData    []mgopooch.Building
+}
+
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
+    pd := PageData{IP: confrdr.PoochConf.IP, Port: confrdr.PoochConf.Port}
+
     t, _ := template.ParseFiles("html/index.html")
-    t.Execute(w, nil)
+    t.Execute(w, pd)
 }
 
 func AdminHandler(w http.ResponseWriter, r *http.Request) {
     u, _ := mgopooch.GetUser(get_username(r))
-    if u.Type == "admin" {
-        t, _ := template.ParseFiles("html/admin.html")
-        t.Execute(w, u)
-    } else {
+    if u.Type != "admin" {
         http.Redirect(w, r, "/", 302)
+        return
     }
+    pd := PageData{IP: confrdr.PoochConf.IP, Port: confrdr.PoochConf.Port, UserData: u}
+
+    t, _ := template.ParseFiles("html/admin.html")
+    t.Execute(w, pd)
 }
 
 func AdminRoomsHandler(w http.ResponseWriter, r *http.Request) {
@@ -39,8 +53,11 @@ func AdminRoomsHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
 
+    b, _ := mgopooch.GetRooms()
+    pd := PageData{confrdr.PoochConf.IP, confrdr.PoochConf.Port, u, b}
+
     t, _ := template.ParseFiles("html/rooms.html")
-    t.Execute(w, u)
+    t.Execute(w, pd)
 }
 
 
@@ -51,8 +68,10 @@ func AdminGroupsHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
 
+    pd := PageData{IP: confrdr.PoochConf.IP, Port: confrdr.PoochConf.Port, UserData: u}
+
     t, _ := template.ParseFiles("html/groups.html")
-    t.Execute(w, u)
+    t.Execute(w, pd)
 }
 
 
@@ -99,8 +118,10 @@ func TaskHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
 
+    pd := PageData{IP: confrdr.PoochConf.IP, Port: confrdr.PoochConf.Port, UserData: u}
+
     t, _ := template.ParseFiles("html/task.html")
-    t.Execute(w, u)
+    t.Execute(w, pd)
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {

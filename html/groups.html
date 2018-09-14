@@ -3,13 +3,13 @@
 <html>
     <head>
         <title>Pooch</title>
-        <link rel="icon" type="image/png" href="http://192.168.200.132:8080/public/img/corgo.png"/>
-        <link rel="stylesheet" type="text/css" href="http://192.168.200.132:8080/public/css/groups.css"/>
+        <link rel="icon" type="image/png" href="http://{{ .IP }}:{{ .Port }}/public/img/corgo.png"/>
+        <link rel="stylesheet" type="text/css" href="http://{{ .IP }}:{{ .Port }}/public/css/groups.css"/>
     </head>
 
     <body>
         <div id="header">
-            <img src="http://192.168.200.132:8080/public/img/corgo.png" alt="pooch" style="width:150px;height:120px;">
+            <img src="http://{{ .IP }}:{{ .Port }}/public/img/corgo.png" alt="pooch" style="width:150px;height:120px;">
 
             <div id="heading">
                 <h1>Pooch Admin</h1>
@@ -17,7 +17,7 @@
             </div>
 
             <div id="accop">
-                Welcome {{ .Fname }} {{ .Lname }}!<br>
+                Welcome {{ .UserData.Fname }} {{ .UserData.Lname }}!<br>
                 <form action="/admin" method="post">
                     <button type="submit">Admin</button>
                 </form>

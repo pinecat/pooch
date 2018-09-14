@@ -26,3 +26,9 @@ fmt.Println(result.Abrv)
 for name, room := range result.Rooms {
     fmt.Printf(name + ": {\n\tstatus: " + room.Status + "\n\tgroup: %v\n}\n", room.Group)
 }
+
+temp, err := mgopooch.GetRooms()
+if err != nil {
+    log.Fatal(err)
+}
+fmt.Println(temp[0].Rooms["101"].Status)

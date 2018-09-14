@@ -10,12 +10,13 @@ package main
 
 /* imports */
 import (
-    "fmt" // for printing out text
-    _"log" // for logging errors
+    _"fmt" // for printing out text
+    "log" // for logging errors
     "net/http" // for hosting webapp server
     "github.com/gorilla/mux" // gorilla mux router for handling funcs
     "github.com/pinecat/pooch/mgopooch"
     "github.com/pinecat/pooch/handle"
+    "github.com/pinecat/pooch/confrdr"
 )
 
 /* globals */
@@ -29,6 +30,7 @@ var router = mux.NewRouter()
     returns:    void
 */
 func main() {
+    confrdr.ReadConfFile("pooch.conf")
     mgopooch.SetupSession()
 
     router.HandleFunc("/", handle.IndexHandler) // handle the index page
@@ -47,7 +49,7 @@ func main() {
     http.Handle("/", router)
     http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
 
-    fmt.Println("Pooch web server running on port 8080....")
-    http.ListenAndServe(":8080", nil) // start the webapp on port 8080
+    log.Println("[LOG] Pooch web server running on: http://" + confrdr.PoochConf.IP + ":" + confrdr.PoochConf.Port + "/")
+    http.ListenAndServe(":" + confrdr.PoochConf.Port, nil) // start the webapp on port 8080
     // err := http.ListenAndServeTLS(":8080", "ssl/pooch.cert", "ssl/pooch.key", nil) // start the webapp on port 8080
 }
