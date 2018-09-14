@@ -39,6 +39,8 @@ func main() {
     router.HandleFunc("/admin/rooms", handle.AdminRoomsHandler)
     router.HandleFunc("/admin/groups", handle.AdminGroupsHandler)
 
+    router.HandleFunc("/task", handle.TaskHandler)
+
     router.HandleFunc("/login", handle.LoginHandler).Methods("POST")
     router.HandleFunc("/logout", handle.LogoutHandler).Methods("POST")
 

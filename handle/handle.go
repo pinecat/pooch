@@ -92,6 +92,17 @@ func AdminRemoveuserHandler(w http.ResponseWriter, r *http.Request) {
     http.Redirect(w, r, "/admin", 302)
 }
 
+func TaskHandler(w http.ResponseWriter, r *http.Request) {
+    u, _ := mgopooch.GetUser(get_username(r))
+    if u.Type != "reg" && u.Type != "admin" {
+        http.Redirect(w, r, "/", 302)
+        return
+    }
+
+    t, _ := template.ParseFiles("html/task.html")
+    t.Execute(w, u)
+}
+
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
     username := r.FormValue("username")
     password := r.FormValue("password")
@@ -108,7 +119,11 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
         // make sure the password matches the hash in database
         if mgopooch.IsPassValid(password, &u) == true {
             set_session(username, w)
-            redirect_target = "/admin"
+            if u.Type == "reg" {
+                redirect_target = "/task"
+            } else if u.Type == "admin" {
+                redirect_target = "/admin"
+            }
         }
     }
     http.Redirect(w, r, redirect_target, 302)
