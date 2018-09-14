@@ -14,9 +14,8 @@ import (
     _"log" // for logging errors
     "net/http" // for hosting webapp server
     "github.com/gorilla/mux" // gorilla mux router for handling funcs
-    "pooch/mgopooch"
-    "pooch/handle"
-    _"labix.org/v2/mgo/bson"
+    "github.com/pinecat/pooch/mgopooch"
+    "github.com/pinecat/pooch/handle"
 )
 
 /* globals */
@@ -48,4 +47,5 @@ func main() {
 
     fmt.Println("Pooch web server running on port 8080....")
     http.ListenAndServe(":8080", nil) // start the webapp on port 8080
+    // err := http.ListenAndServeTLS(":8080", "ssl/pooch.cert", "ssl/pooch.key", nil) // start the webapp on port 8080
 }

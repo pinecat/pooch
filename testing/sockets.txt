@@ -18,3 +18,23 @@ func Upgrade(w http.ResponseWriter, r *http.Request) (*Conn, error) {
     }
     return conn
 }
+
+
+func TempHandler(w http.ResponseWriter, r *http.Request) {
+    conn, err := upgrader.Upgrade(w, r, nil)
+    if err != nil {
+        fmt.Println("ERR:", err)
+    }
+    go func(conn *websocket.Conn) {
+        c := mgopooch.DB.C("buildings")
+        for {
+            result := mgopooch.Building{}
+            c.Find(bson.M{"name":"Nicarry"}).One(&result)
+            err := conn.WriteJSON(result)
+            if err != nil {
+                fmt.Println("ERR:", err)
+            }
+            time.Sleep(time.Second * 5)
+        }
+    }(conn)
+}

@@ -3,11 +3,10 @@ package handle
 
 /* imports */
 import (
-    _"fmt"
     "net/http"
     "html/template" // for setting up html files
     "github.com/gorilla/securecookie" // for handling session info and security
-    "pooch/mgopooch"
+    "github.com/pinecat/pooch/mgopooch"
     "github.com/gorilla/websocket"
 )
 
