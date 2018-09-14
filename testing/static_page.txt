@@ -1,0 +1,20 @@
+{{ range $index, $data := .BdngData }}
+{{ $data.Name }}
+    <table>
+        <thead>
+            <th>Room</th>
+            <th>Status</th>
+            <th>Group</th>
+        </thead>
+
+        <tbody>
+            {{ range $num, $info := $data.Rooms }}
+            <tr>
+                    <td>{{ $data.Abrv }}{{ $num }}</td>
+                    <td>{{ $info.Status }}</td>
+                    <td>{{ $info.Group }}</td>
+            </tr>
+            {{ end }}
+        </tbody>
+    </table>
+{{ end }}

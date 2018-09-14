@@ -1,0 +1,17 @@
+01 - Restart computer
+02 - Check presenter's clicker
+03 - Press power on touch panel
+04 - Select computer as source
+05 - Make sure the projector turned on (and record lamp hours)
+06 - Visually inspect connections to projector
+07 - Test computer audio (is it loud enough)
+08 - Test volume on the control panel
+09 - Test internet connection of desktop
+10 - Test VGA audio and video
+11 - Select DVD player as source (test audio and video)
+12 - Test DVD controls on the touch panel (and check IR blaster)
+13 - Select Doc Cam as source (test bulbs, focus, and video output)
+14 - Check monitor arm for flexibility
+15 - Check the room and furniture for damage
+16 - Test the screen freeze (does it hold for more than 5 seconds)
+17 - Shut down the system

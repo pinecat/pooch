@@ -28,27 +28,45 @@ insert({
 	"rooms": {
 		"101": {
 			"status": "unchecked",
-			"group": 0
+			"group": 0,
+			"lamph": 0
 		},
 		"104": {
 			"status": "unchecked",
-			"group": 0
+			"group": 0,
+			"lamph": {
+				"interactive": 0,
+				"standard": 0
+			}
 		},
 		"106": {
 			"status": "unchecked",
-			"group": 0
+			"group": 0,
+			"lamph": {
+				"interactive": 0,
+				"standard": 0
+			}
 		},
 		"127": {
 			"status": "unchecked",
-			"group": 0
+			"group": 0,
+			"lamph": 0
 		},
 		"129": {
 			"status": "unchecked",
-			"group": 0
+			"group": 0,
+			"lamph": {
+				"interactive": 0,
+				"standard": 0
+			}
 		},
 		"131": {
 			"status": "unchecked",
-			"group": 0
+			"group": 0,
+			"lamph": {
+				"interactive": 0,
+				"standard": 0
+			}
 		}
 	},
 	"abrv": "N"
