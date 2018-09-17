@@ -25,6 +25,12 @@
         </div>
 
         <div id="content">
+            <div class="rbtns">
+                <input id="sub1" type="submit" value="sub1" onclick="rbtn(this)"></input>
+                <input id="sub2" type="submit" value="sub2" onclick="rbtn(this)"></input>
+                <input id="sub3" type="submit" value="sub3" onclick="rbtn(this)"></input>
+            </div>
+            <input id="userinput" type="text" readonly></input>
         </div>
 
         <div id="footer">
@@ -32,5 +38,13 @@
             <p class="contact"><a href="mailto:dudleyr1@etown.edu">dudleyr1@etown.edu</a><br>Rory Dudley<br>pinecat</p>
             <p class ="copyright">Copyright &copy; Rory Dudley (aka pinecat)</p>
         </div>
+
+        <script>
+            function rbtn(elem) {
+                //console.log(elem.value);
+                var input = document.getElementById("userinput")
+                input.value = elem.value;
+            }
+        </script>
     </body>
 </html>

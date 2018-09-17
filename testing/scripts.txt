@@ -1,0 +1,15 @@
+function addtoev() {
+    var content = document.getElementsByClassName("roombtns")[0];
+    var rbtns = content.getElementsByTagName("button");
+    for (i = 0; i < rbtns.length; i++) {
+        rbtns[i].addEventListener("click", function() {
+            alert("you clicked")
+        });
+    }
+}
+
+window.addEventListener("load",function() {
+    addtoev();
+});
+
+-----------------------------------------------------------------
