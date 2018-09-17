@@ -18,3 +18,12 @@
         </tbody>
     </table>
 {{ end }}
+
+---------------------------------------------------------
+
+<div class="rbtns">
+    <input id="sub1" type="submit" value="sub1" onclick="rbtn(this)"></input>
+    <input id="sub2" type="submit" value="sub2" onclick="rbtn(this)"></input>
+    <input id="sub3" type="submit" value="sub3" onclick="rbtn(this)"></input>
+</div>
+<input id="userinput" type="text" readonly></input>

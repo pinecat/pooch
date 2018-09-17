@@ -25,12 +25,15 @@
         </div>
 
         <div id="content">
-            <div class="rbtns">
-                <input id="sub1" type="submit" value="sub1" onclick="rbtn(this)"></input>
-                <input id="sub2" type="submit" value="sub2" onclick="rbtn(this)"></input>
-                <input id="sub3" type="submit" value="sub3" onclick="rbtn(this)"></input>
+            <div id="rbtns">
+                <input id="roomselect" type="text" placeholder="Select A Room" readonly></input>
+                {{ range $index, $data := .BdngData }}
+                    {{ range $num, $info := $data.Rooms }}
+                        <input id="{{ $data.Abrv }}{{ $num }}" type="submit" value="{{ $data.Abrv }}{{ $num }}" onclick="rbtn(this)"></input>
+                    {{ end }}
+                {{ end }}
             </div>
-            <input id="userinput" type="text" readonly></input>
+
         </div>
 
         <div id="footer">
@@ -41,8 +44,7 @@
 
         <script>
             function rbtn(elem) {
-                //console.log(elem.value);
-                var input = document.getElementById("userinput")
+                var input = document.getElementById("roomselect")
                 input.value = elem.value;
             }
         </script>

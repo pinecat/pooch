@@ -1,0 +1,33 @@
+BUILDING
+
+insert({
+	"name": "Nicarry",
+	"rooms": {
+		"101": {
+			"status": "unchecked",
+			"group": 0,
+			"lamph": 0
+		},
+		"104": {
+			"status": "unchecked",
+			"group": 0,
+			"lamph": {
+				"interactive": 0,
+				"standard": 0
+			}
+		}
+    },
+    "abrv": "N"
+}
+
+USER
+
+insert({
+    "username" : "rory",
+    "password" : "$2a$10$dfRn0Y19yYdlGpZmEO1.j.c5Bd3t9CDBCH.EH/u5X6fa71XCfTeWG",
+    "fname" : "Rory",
+    "lname" : "Dudley",
+    "type" : "admin",
+    "team" : 0,
+    ??? "group" : 0 ???
+})

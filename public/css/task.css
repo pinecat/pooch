@@ -55,6 +55,11 @@
     display: inline;
 }
 
+#content #rbtns {
+    float: left;
+    display: list-item;
+}
+
 #footer {
     background-color: #9b7528;
     clear: both;

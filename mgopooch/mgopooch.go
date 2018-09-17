@@ -19,6 +19,7 @@ type User struct {
     Fname       string
     Lname       string
     Type        string
+    Team        int
 }
 
 type AllRooms struct {
@@ -35,6 +36,11 @@ type Building struct {
 type Room struct {
     Status  string
     Group   int
+}
+
+type Assign struct {
+    Group   int
+    Team    int
 }
 
 /* globals */
@@ -92,6 +98,16 @@ func RemoveUser(username string) error {
 func GetRooms() ([]Building, error) {
     c := DB.C("buildings")
     var result []Building
+    err := c.Find(nil).All(&result)
+    if err != nil {
+        return result, err
+    }
+    return result, nil
+}
+
+func GetAssignments() ([]Assign, error) {
+    c := DB.C("assign")
+    var result []Assign
     err := c.Find(nil).All(&result)
     if err != nil {
         return result, err

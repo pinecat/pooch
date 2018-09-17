@@ -59,7 +59,7 @@ func AdminRoomsHandler(w http.ResponseWriter, r *http.Request) {
     }
 
     b, _ := mgopooch.GetRooms()
-    pd := PageData{confrdr.PoochConf.IP, confrdr.PoochConf.Port, u, b}
+    pd := PageData{IP: confrdr.PoochConf.IP, Port: confrdr.PoochConf.Port, UserData: u, BdngData: b}
 
     t, _ := template.ParseFiles("html/rooms.html")
     t.Execute(w, pd)
@@ -93,7 +93,7 @@ func AdminCreateuserHandler(w http.ResponseWriter, r *http.Request) {
     lname := r.FormValue("lname")
     acc := r.FormValue("acctype")
 
-    u = mgopooch.User{Username:username, Password:password, Fname:fname, Lname:lname, Type:acc}
+    u = mgopooch.User{Username: username, Password: password, Fname: fname, Lname: lname, Type: acc}
     mgopooch.InsertUser(&u)
 
     http.Redirect(w, r, "/admin", 302)
@@ -123,10 +123,21 @@ func TaskHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    pd := PageData{IP: confrdr.PoochConf.IP, Port: confrdr.PoochConf.Port, UserData: u}
+    b, _ := mgopooch.GetRooms()
+    pd := PageData{IP: confrdr.PoochConf.IP, Port: confrdr.PoochConf.Port, UserData: u, BdngData: b}
 
     t, _ := template.ParseFiles("html/task.html")
     t.Execute(w, pd)
+}
+
+func TaskRoomHandler(w http.ResponseWriter, r *http.Request) {
+    u, _ := mgopooch.GetUser(get_username(r))
+    if u.Type != "reg" && u.Type != "admin" {
+        http.Redirect(w, r, "/", 302)
+        return
+    }
+
+
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
