@@ -43,6 +43,8 @@ func main() {
 
     router.HandleFunc("/task", handle.TaskHandler)
 
+    router.HandleFunc("/temp", handle.TempHandler)
+
     router.HandleFunc("/login", handle.LoginHandler).Methods("POST")
     router.HandleFunc("/logout", handle.LogoutHandler).Methods("POST")
 

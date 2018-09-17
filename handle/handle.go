@@ -27,6 +27,11 @@ type PageData struct {
     BdngData    []mgopooch.Building
 }
 
+func TempHandler(w http.ResponseWriter, r *http.Request) {
+    t, _ := template.ParseFiles("html/temp.html")
+    t.Execute(w, nil)
+}
+
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
     pd := PageData{IP: confrdr.PoochConf.IP, Port: confrdr.PoochConf.Port}
 
