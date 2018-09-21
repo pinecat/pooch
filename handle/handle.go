@@ -178,7 +178,7 @@ func AdminRmroomHandler(w http.ResponseWriter, r *http.Request) {
 
     err := mgopooch.RemoveRoom(name, num)
     if err != nil {
-        disperr(w, "Could not remove building!  Are you sure the building exists?")
+        disperr(w, "Could not remove room!  Are you sure the room exists?")
     } else {
         http.Redirect(w, r, "/admin", 302)
     }

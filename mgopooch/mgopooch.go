@@ -140,13 +140,15 @@ func GetRoom(name string, num string) (Room, error) {
     if err != nil {
         return Room{}, err
     }
+
     var r Room
     for i, data := range result.Rooms {
-        if i != num {
-            err = errors.New("Room not found!")
-        } else {
+        if i == num {
             r = data
         }
+    }
+    if r.Status != "unchecked" && r.Status != "checked" {
+        err = errors.New("Room not found!")
     }
     return r, err
 }
