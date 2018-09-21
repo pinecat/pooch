@@ -7,7 +7,7 @@
         <link rel="stylesheet" type="text/css" href="http://{{ .IP }}:{{ .Port }}/public/css/admin.css"/>
         <script>
             alert("{{ .Msg }}");
-            window.location.replace("http://{{ .IP }}:{{ .Port }}/admin");
+            window.location.replace("http://{{ .IP }}:{{ .Port }}{{ .Reloc }}");
         </script>
     </head>
 </html>

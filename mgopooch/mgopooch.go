@@ -171,3 +171,8 @@ func UpdateBuildingGroup(building string, room string, group string) error {
     err := DB.C("buildings").Update(bson.M{"name":building}, bson.M{"$set": bson.M{"rooms." + room + ".group": gr}})
     return err
 }
+
+func UpdateRoomStatus(building string, num string, room *Room) error {
+    err := DB.C("buildings").Update(bson.M{"name":building}, bson.M{"$set": bson.M{"rooms." + num + "": room}})
+    return err
+}

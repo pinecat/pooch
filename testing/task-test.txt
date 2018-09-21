@@ -38,3 +38,29 @@
         {{ end }}
     {{ end }}
 </div>
+
+-------------------------------------------------------------------------
+
+if lamph == "" {
+    disperr(w, "Please enter lamphours for the room!", "/task")
+}
+if room.Lamph.Interactive != -1 {
+    s := strings.Split(lamph, ",")
+    if len(s) == 1 {
+        disperr(w, "Please enter lamphours for the interactive projector as well!", "/task")
+    } else {
+        building.Rooms[roomnum].Lamph.Standard, _ = strconv.Atoi(s[0])
+        building.Rooms[roomnum].Lamph.Interactive, _ = strconv.Atoi(s[0])
+    }
+} else {
+    building.Rooms[roomnum].Lamph.Standard, _ = strconv.Atoi(lamph)
+}
+
+if problist != "" {
+    s := strings.Split(problist, ",")
+    building.Rooms[roomnum].Probcat = make([]int, len(s))
+    for i := 0; i < len(s); i++ {
+        problem, _ := strconv.Atoi(s[i])
+        building.Rooms[roomnum].Probcat = append(building.Rooms[roomnum].Probcat, problem)
+    }
+}

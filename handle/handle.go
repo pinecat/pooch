@@ -4,6 +4,9 @@ package handle
 /* imports */
 import (
     _"fmt"
+    "strings"
+    _"unicode"
+    "strconv"
     "net/http"
     "html/template" // for setting up html files
     "github.com/gorilla/securecookie" // for handling session info and security
@@ -18,6 +21,7 @@ var upgrader = websocket.Upgrader {
     ReadBufferSize:  1024,
     WriteBufferSize: 1024,
 }
+const alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 /* structs */
 type PageData struct {
@@ -27,6 +31,7 @@ type PageData struct {
     BdngData    []mgopooch.Building
     Users       []mgopooch.User
     Msg         string
+    Reloc       string
 }
 
 func TempHandler(w http.ResponseWriter, r *http.Request) {
@@ -83,12 +88,12 @@ func AdminCreateuserHandler(w http.ResponseWriter, r *http.Request) {
     acc := r.FormValue("acctype")
 
     if (username == "" || password == "" || fname == "" || lname == "" || acc == "") {
-        disperr(w, "Invalid or missing information for user creation!")
+        disperr(w, "Invalid or missing information for user creation!", "/admin")
     } else {
         currentUsers, _ := mgopooch.GetAllUsers();
         for _, val := range currentUsers {
             if val.Username == username {
-                disperr(w, "User already exists!")
+                disperr(w, "User already exists!", "/admin")
                 return
             }
         }
@@ -104,13 +109,13 @@ func AdminRemoveuserHandler(w http.ResponseWriter, r *http.Request) {
     username := r.FormValue("rmusername")
 
     if username == "" {
-        disperr(w, "Please enter the username of the user you would like to remove!")
+        disperr(w, "Please enter the username of the user you would like to remove!", "/admin")
     } else if username == u.Username {
-        disperr(w, "You may not remove your own account!")
+        disperr(w, "You may not remove your own account!", "/admin")
     } else {
         err := mgopooch.RemoveUser(username)
         if err != nil {
-            disperr(w, "Could not remove user!  Are you sure the user exists?")
+            disperr(w, "Could not remove user!  Are you sure the user exists?", "/admin")
         } else {
             http.Redirect(w, r, "/admin", 302)
         }
@@ -126,7 +131,7 @@ func AdminAddbuildingHandler(w http.ResponseWriter, r *http.Request) {
     b, _ := mgopooch.GetRooms()
     for _, data := range b {
         if data.Name == name || data.Abrv == abrv {
-            disperr(w, "Building already exists!")
+            disperr(w, "Building already exists!", "/admin")
             return
         }
     }
@@ -140,7 +145,7 @@ func AdminRmbuildingHandler(w http.ResponseWriter, r *http.Request) {
     name := r.FormValue("bdngname")
     err := mgopooch.RemoveBuilding(name)
     if err != nil {
-        disperr(w, "Could not remove building!  Are you sure the building exists?")
+        disperr(w, "Could not remove building!  Are you sure the building exists?", "/admin")
     } else {
         http.Redirect(w, r, "/admin", 302)
     }
@@ -164,7 +169,7 @@ func AdminAddroomHandler(w http.ResponseWriter, r *http.Request) {
         if data.Name == name {
             for roomnum, _ := range data.Rooms {
                 if roomnum == num {
-                    disperr(w, "Room already exists!")
+                    disperr(w, "Room already exists!", "/admin")
                     return
                 }
             }
@@ -182,7 +187,7 @@ func AdminRmroomHandler(w http.ResponseWriter, r *http.Request) {
 
     err := mgopooch.RemoveRoom(name, num)
     if err != nil {
-        disperr(w, "Could not remove room!  Are you sure the room exists?")
+        disperr(w, "Could not remove room!  Are you sure the room exists?", "/admin")
     } else {
         http.Redirect(w, r, "/admin", 302)
     }
@@ -227,7 +232,7 @@ func TaskHandler(w http.ResponseWriter, r *http.Request) {
         assign[i].Abrv = b[i].Abrv
         assign[i].Rooms = make(map[string]mgopooch.Room)
         for num, info := range b[i].Rooms {
-            if u.Group == info.Group {
+            if u.Group == info.Group && info.Status != "checked" {
                 assign[i].Rooms[num] = info
             }
         }
@@ -240,9 +245,67 @@ func TaskHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func TaskRoomHandler(w http.ResponseWriter, r *http.Request) {
-    //u := chlogin(w, r)
+    chlogin(w, r)
 
+    roomselect := r.FormValue("roomselect")
+    problist := r.FormValue("probcatlist")
+    lamph := r.FormValue("lamphours")
+    notes := r.FormValue("notes")
+    if roomselect == "" {
+        disperr(w, "Please select a room to submit!", "/task")
+    }
 
+    var abrv string = ""
+    var roomnum string = ""
+    for _, c := range roomselect {
+        if strings.Contains(alpha, strings.ToUpper(string(c))) {
+            abrv += string(c)
+        } else {
+            roomnum += string(c)
+        }
+    }
+
+    b, _ := mgopooch.GetRooms()
+    var bdngName string
+    for _, data := range b {
+        if abrv == data.Abrv {
+            bdngName = data.Name
+        }
+    }
+
+    room, _ := mgopooch.GetRoom(bdngName, roomnum)
+    if lamph == "" {
+        disperr(w, "Please enter lamphours for the room!", "/task")
+    }
+    if room.Lamph.Interactive != -1 {
+        s := strings.Split(lamph, ",")
+        if len(s) == 1 {
+            disperr(w, "Please enter lamphours for the interactive projector as well!", "/task")
+        } else {
+            room.Lamph.Standard, _ = strconv.Atoi(s[0])
+            room.Lamph.Interactive, _ = strconv.Atoi(s[0])
+        }
+    } else {
+        room.Lamph.Standard, _ = strconv.Atoi(lamph)
+    }
+
+    var problems []int
+    if problist != "" {
+        buffer := trim_space(problist)
+        s := strings.Split(buffer, ",")
+        for i := 0; i < len(s); i++ {
+            p, _ := strconv.Atoi(s[i])
+            problems = append(problems, p)
+        }
+        room.Probcat = problems
+    }
+
+    room.Status = "checked"
+    room.Notes = notes;
+
+    mgopooch.UpdateRoomStatus(bdngName, roomnum, &room)
+
+    http.Redirect(w, r, "/task", 302)
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
@@ -308,6 +371,16 @@ func chlogin(w http.ResponseWriter, r *http.Request) mgopooch.User {
     return u
 }
 
+func trim_space(buffer string) string {
+    var str string = ""
+    for _, c := range buffer {
+        if c != ' ' {
+            str += string(c)
+        }
+    }
+    return str
+}
+
 func get_username(r *http.Request) (username string) {
     if cookie, err := r.Cookie("session"); err == nil {
         cookieValue := make(map[string]string)
@@ -328,9 +401,8 @@ func clear_session(w http.ResponseWriter) {
     http.SetCookie(w, cookie)
 }
 
-func disperr(w http.ResponseWriter, msg string) {
+func disperr(w http.ResponseWriter, msg string, reloc string) {
     t, _ := template.ParseFiles("html/error.html")
-    pd := PageData{IP: confrdr.PoochConf.IP, Port: confrdr.PoochConf.Port}
-    pd.Msg = msg
+    pd := PageData{IP: confrdr.PoochConf.IP, Port: confrdr.PoochConf.Port, Msg: msg, Reloc: reloc}
     t.Execute(w, pd)
 }
