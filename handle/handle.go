@@ -25,6 +25,8 @@ type PageData struct {
     Port        string
     UserData    mgopooch.User
     BdngData    []mgopooch.Building
+    Users       []mgopooch.User
+    Msg         string
 }
 
 func TempHandler(w http.ResponseWriter, r *http.Request) {
@@ -40,23 +42,17 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func AdminHandler(w http.ResponseWriter, r *http.Request) {
-    u, _ := mgopooch.GetUser(get_username(r))
-    if u.Type != "admin" {
-        http.Redirect(w, r, "/", 302)
-        return
-    }
-    pd := PageData{IP: confrdr.PoochConf.IP, Port: confrdr.PoochConf.Port, UserData: u}
+    u := chadmin(w, r)
+
+    b, _ := mgopooch.GetRooms()
+    pd := PageData{IP: confrdr.PoochConf.IP, Port: confrdr.PoochConf.Port, UserData: u, BdngData: b}
 
     t, _ := template.ParseFiles("html/admin.html")
     t.Execute(w, pd)
 }
 
 func AdminRoomsHandler(w http.ResponseWriter, r *http.Request) {
-    u, _ := mgopooch.GetUser(get_username(r))
-    if u.Type != "admin" {
-        http.Redirect(w, r, "/", 302)
-        return
-    }
+    u := chadmin(w, r)
 
     b, _ := mgopooch.GetRooms()
     pd := PageData{IP: confrdr.PoochConf.IP, Port: confrdr.PoochConf.Port, UserData: u, BdngData: b}
@@ -65,15 +61,12 @@ func AdminRoomsHandler(w http.ResponseWriter, r *http.Request) {
     t.Execute(w, pd)
 }
 
-
 func AdminGroupsHandler(w http.ResponseWriter, r *http.Request) {
-    u, _ := mgopooch.GetUser(get_username(r))
-    if u.Type != "admin" {
-        http.Redirect(w, r, "/", 302)
-        return
-    }
+    u := chadmin(w, r)
 
-    pd := PageData{IP: confrdr.PoochConf.IP, Port: confrdr.PoochConf.Port, UserData: u}
+    b, _ := mgopooch.GetRooms()
+    ul, _ := mgopooch.GetAllUsers()
+    pd := PageData{IP: confrdr.PoochConf.IP, Port: confrdr.PoochConf.Port, UserData: u, BdngData: b, Users: ul}
 
     t, _ := template.ParseFiles("html/groups.html")
     t.Execute(w, pd)
@@ -81,11 +74,7 @@ func AdminGroupsHandler(w http.ResponseWriter, r *http.Request) {
 
 
 func AdminCreateuserHandler(w http.ResponseWriter, r *http.Request) {
-    u, _ := mgopooch.GetUser(get_username(r))
-    if u.Type != "admin" {
-        http.Redirect(w, r, "/", 302)
-        return
-    }
+    chadmin(w, r)
 
     username := r.FormValue("mkusername")
     password := r.FormValue("password")
@@ -93,36 +82,110 @@ func AdminCreateuserHandler(w http.ResponseWriter, r *http.Request) {
     lname := r.FormValue("lname")
     acc := r.FormValue("acctype")
 
-    u = mgopooch.User{Username: username, Password: password, Fname: fname, Lname: lname, Type: acc}
-    mgopooch.InsertUser(&u)
-
-    http.Redirect(w, r, "/admin", 302)
+    if (username == "" || password == "" || fname == "" || lname == "" || acc == "") {
+        disperr(w, "Invalid or missing information for user creation!")
+    } else {
+        currentUsers, _ := mgopooch.GetAllUsers();
+        for _, val := range currentUsers {
+            if val.Username == username {
+                disperr(w, "User already exists!")
+                return
+            }
+        }
+        u := mgopooch.User{Username: username, Password: password, Fname: fname, Lname: lname, Type: acc}
+        mgopooch.InsertUser(&u)
+        http.Redirect(w, r, "/admin", 302)
+    }
 }
 
 func AdminRemoveuserHandler(w http.ResponseWriter, r *http.Request) {
-    u, _ := mgopooch.GetUser(get_username(r))
-    if u.Type != "admin" {
-        http.Redirect(w, r, "/", 302)
-        return
-    }
+    u := chadmin(w, r)
 
     username := r.FormValue("rmusername")
-    if username == u.Username {
-        http.Redirect(w, r, "/admin", 302)
-        return
-    }
-    mgopooch.RemoveUser(username)
 
+    if username == "" {
+        disperr(w, "Please enter the username of the user you would like to remove!")
+    } else if username == u.Username {
+        disperr(w, "You may not remove your own account!")
+    } else {
+        err := mgopooch.RemoveUser(username)
+        if err != nil {
+            disperr(w, "Could not remove user!  Are you sure the user exists?")
+        } else {
+            http.Redirect(w, r, "/admin", 302)
+        }
+    }
+}
+
+func AdminAddbuildingHandler(w http.ResponseWriter, r *http.Request) {
+    chadmin(w, r)
+
+    name := r.FormValue("bdngname")
+    abrv := r.FormValue("bdngabrv")
+
+    b, _ := mgopooch.GetRooms()
+    for _, data := range b {
+        if data.Name == name {
+            disperr(w, "Building already exists!")
+            return
+        }
+    }
+    mgopooch.InsertBuilding(name, abrv)
     http.Redirect(w, r, "/admin", 302)
 }
 
-func TaskHandler(w http.ResponseWriter, r *http.Request) {
-    u, _ := mgopooch.GetUser(get_username(r))
-    if u.Type != "reg" && u.Type != "admin" {
-        http.Redirect(w, r, "/", 302)
-        return
-    }
+func AdminRmbuildingHandler(w http.ResponseWriter, r *http.Request) {
+    chadmin(w, r)
 
+    name := r.FormValue("bdngname")
+    err := mgopooch.RemoveBuilding(name)
+    if err != nil {
+        disperr(w, "Could not remove building!  Are you sure the building exists?")
+    } else {
+        http.Redirect(w, r, "/admin", 302)
+    }
+}
+
+func AdminAddroomHandler(w http.ResponseWriter, r *http.Request) {
+    chadmin(w, r)
+
+    name := r.FormValue("bdngname")
+    num := r.FormValue("roomnum")
+    proj := r.FormValue("projtype")
+    group := r.FormValue("group")
+
+    b, _ := mgopooch.GetRooms()
+
+    for _, data := range b {
+        if data.Name == name {
+            for roomnum, _ := range data.Rooms {
+                if roomnum == num {
+                    disperr(w, "Room already exists!")
+                    return
+                }
+            }
+        }
+    }
+    mgopooch.InsertRoom(name, num, proj, group)
+    http.Redirect(w, r, "/admin", 302)
+}
+
+func AdminRmroomHandler(w http.ResponseWriter, r *http.Request) {
+    chadmin(w, r)
+
+    name := r.FormValue("bdngname")
+    num := r.FormValue("roomnum")
+
+    err := mgopooch.RemoveRoom(name, num)
+    if err != nil {
+        disperr(w, "Could not remove building!  Are you sure the building exists?")
+    } else {
+        http.Redirect(w, r, "/admin", 302)
+    }
+}
+
+func TaskHandler(w http.ResponseWriter, r *http.Request) {
+    u := chlogin(w, r)
     b, _ := mgopooch.GetRooms()
     pd := PageData{IP: confrdr.PoochConf.IP, Port: confrdr.PoochConf.Port, UserData: u, BdngData: b}
 
@@ -131,11 +194,7 @@ func TaskHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func TaskRoomHandler(w http.ResponseWriter, r *http.Request) {
-    u, _ := mgopooch.GetUser(get_username(r))
-    if u.Type != "reg" && u.Type != "admin" {
-        http.Redirect(w, r, "/", 302)
-        return
-    }
+    //u := chlogin(w, r)
 
 
 }
@@ -185,6 +244,24 @@ func set_session(username string, w http.ResponseWriter) {
     }
 }
 
+func chadmin(w http.ResponseWriter, r *http.Request) mgopooch.User {
+    u, _ := mgopooch.GetUser(get_username(r))
+    if u.Type != "admin" {
+        http.Redirect(w, r, "/", 302)
+        return mgopooch.User{}
+    }
+    return u
+}
+
+func chlogin(w http.ResponseWriter, r *http.Request) mgopooch.User {
+    u, _ := mgopooch.GetUser(get_username(r))
+    if u.Type != "regular" && u.Type != "admin" {
+        http.Redirect(w, r, "/", 302)
+        return mgopooch.User{}
+    }
+    return u
+}
+
 func get_username(r *http.Request) (username string) {
     if cookie, err := r.Cookie("session"); err == nil {
         cookieValue := make(map[string]string)
@@ -203,4 +280,11 @@ func clear_session(w http.ResponseWriter) {
         MaxAge: -1,
     }
     http.SetCookie(w, cookie)
+}
+
+func disperr(w http.ResponseWriter, msg string) {
+    t, _ := template.ParseFiles("html/error.html")
+    pd := PageData{IP: confrdr.PoochConf.IP, Port: confrdr.PoochConf.Port}
+    pd.Msg = msg
+    t.Execute(w, pd)
 }

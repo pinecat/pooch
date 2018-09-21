@@ -1,3 +1,5 @@
+
+
 #header {
     width: 100%;
     border: 1px solid;
@@ -54,6 +56,25 @@ h1 {
     margin-left: auto;
     margin-right: auto;
     background-color: #fff;
+    overflow: hidden;
+}
+
+#row1 {
+    float: left;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#row2 {
+    float: left;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#row3 {
+    float: left;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 #view input[type=submit] {
@@ -130,6 +151,67 @@ h1 {
 }
 
 #userop input[type=submit]:hover {
+    border: 2px solid #70551d;
+    background-color: #70551d;
+}
+
+#roomop {
+    width: 295px;
+    border: 2px solid #9b7528;
+    border-radius: 4px;
+    padding: 20px 0px 20px 0px;
+    margin: 10px;
+    font-weight: bold;
+    text-align: right;
+}
+
+#roomop h4 {
+    margin: 0px;
+    margin-top: -20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 20px;
+    //padding-bottom: 20px;
+    background-color: #9b7528;
+    color: white;
+}
+
+#roomop input[type=text] {
+    border: 2px solid #9b7528;
+    border-radius: 4px;
+    text-align: right;
+    padding: 5px;
+    margin: 5px;
+}
+
+#roomop input[type=password] {
+    border: 2px solid #9b7528;
+    border-radius: 4px;
+    text-align: right;
+    padding: 5px;
+    margin: 5px;
+}
+
+#roomop select {
+    border: 2px solid #9b7528;
+    border-radius: 4px;
+    width: 183px;
+    margin: 5px;
+    text-align: right;
+}
+
+#roomop input[type=submit] {
+    border: 2px solid #9b7528;
+    background-color: #9b7528;
+    border-radius: 4px;
+    color: white;
+    text-align: right;
+    padding: 5px;
+    margin: 5px;
+    width: 183px;
+}
+
+#roomop input[type=submit]:hover {
     border: 2px solid #70551d;
     background-color: #70551d;
 }

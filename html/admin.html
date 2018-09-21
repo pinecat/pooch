@@ -23,44 +23,99 @@
         </div>
 
         <div id="content">
-            <div id="view">
-                <form action="/admin/rooms" method="post">
-                    <input type="submit" value="View Rooms"><br>
-                </form>
-                <form action="/admin/groups" method="post">
-                    <input type="submit" value="View Groups"><br>
-                </form>
+            <div id="row1">
+                <div id="view">
+                    <form action="/admin/rooms" method="post">
+                        <input type="submit" value="View Rooms"><br>
+                    </form>
+                    <form action="/admin/groups" method="post">
+                        <input type="submit" value="View Groups"><br>
+                    </form>
+                </div>
+
+                <div id="userop">
+                    <h4>Create User</h4>
+                    <form action="/admin/createuser" method="post">
+                        <input type="text" name="mkusername" placeholder="username/email"><br>
+                        <input type="password" name="password" placeholder="password"><br>
+                        <input type="text" name="fname" placeholder="firstname"><br>
+                        <input type="text" name="lname" placeholder="lastname"><br>
+                        <select name="acctype" dir="rtl">
+                            <option value="">Choose Type</option>
+                            <option value="admin">Admin</option>
+                            <option value="regular">Regular</option>
+                        </select><br>
+                        <input type="submit" value="Submit"><br>
+                    </form>
+                </div>
+
+                <div id="userop">
+                    <h4>Remove User</h4>
+                    <form action="/admin/removeuser" method="post">
+                        <input type="text" name="rmusername" placeholder="username"><br>
+                        <input type="submit" value="Submit"><br>
+                    </form>
+                </div>
             </div>
 
-            <div id="userop">
-                <h4>Create User</h4>
-                <form action="/admin/createuser" method="post">
-                    <input type="text" name="mkusername" placeholder="username/email"><br>
-                    <input type="password" name="password" placeholder="password"><br>
-                    <input type="text" name="fname" placeholder="firstname"><br>
-                    <input type="text" name="lname" placeholder="lastname"><br>
-                    <select name="acctype" dir="rtl">
-                        <option value="">Choose Type</option>
-                        <option value="admin">Admin</option>
-                        <option value="reg">Regular</option>
-                    </select><br>
-                    <input type="submit" value="Submit"><br>
-                </form>
+            <div id="row2">
+                <div id="roomop">
+                    <h4>Add Building</h4>
+                    <form action="/admin/addbdng" method="post">
+                        <input type="text" name="bdngname" placeholder="building name"><br>
+                        <input type="text" name="bdngabrv" placeholder="building abbreviation"><br>
+                        <input type="submit" value="Submit"><br>
+                    </form>
+                </div>
+
+                <div id="roomop">
+                    <h4>Add Room</h4>
+                    <form action="/admin/addroom" method="post">
+                        <select name="bdngname" dir="rtl">
+                            <option value="">Choose Building</option>
+                            {{ range $index, $data := .BdngData }}
+                                <option value="{{ $data.Name }}">{{ $data.Name }}</option>
+                            {{ end }}
+                        </select><br>
+                        <input type="text" name="roomnum" placeholder="room #"><br>
+                        <select name="projtype" dir="rtl">
+                            <option value="">Choose Projector Type</option>
+                            <option value="stanplusinter">Standard & Interactive</option>
+                            <option value="standard">Standard</option>
+                        </select><br>
+                        <input type="text" name="group" placeholder="group (leave empty for 0)"><br>
+                        <input type="submit" value="Submit"><br>
+                    </form>
+                </div>
             </div>
 
-            <div id="userop">
-                <h4>Remove User</h4>
-                <form action="/admin/removeuser" method="post">
-                    <input type="text" name="rmusername" placeholder="username"><br>
-                    <input type="submit" value="Submit"><br>
-                </form>
-            </div>
+            <div id="row3">
+                <div id="roomop">
+                    <h4>Remove Building</h4>
+                    <form action="/admin/rmbdng" method="post">
+                        <select name="bdngname" dir="rtl">
+                            <option value="">Choose Building</option>
+                            {{ range $index, $data := .BdngData }}
+                                <option value="{{ $data.Name }}">{{ $data.Name }}</option>
+                            {{ end }}
+                        </select><br>
+                        <input type="submit" value="Submit"><br>
+                    </form>
+                </div>
 
-            <div id="roomop">
-                <h4>Add Building</h4>
-                <form action="/admin/addbuilding" method="post">
-                    
-                </form>
+                <div id="roomop">
+                    <h4>Remove Room</h4>
+                    <form action="/admin/rmroom" method="post">
+                        <select name="bdngname" dir="rtl">
+                            <option value="">Choose Building</option>
+                            {{ range $index, $data := .BdngData }}
+                                <option value="{{ $data.Name }}">{{ $data.Name }}</option>
+                            {{ end }}
+                        </select><br>
+                        <input type="text" name="roomnum" placeholder="room #"><br>
+                        <input type="submit" value="Submit"><br>
+                    </form>
+                </div>
             </div>
         </div>
 

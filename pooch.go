@@ -41,6 +41,11 @@ func main() {
     router.HandleFunc("/admin/rooms", handle.AdminRoomsHandler)
     router.HandleFunc("/admin/groups", handle.AdminGroupsHandler)
 
+    router.HandleFunc("/admin/addbdng", handle.AdminAddbuildingHandler)
+    router.HandleFunc("/admin/rmbdng", handle.AdminRmbuildingHandler)
+    router.HandleFunc("/admin/addroom", handle.AdminAddroomHandler)
+    router.HandleFunc("/admin/rmroom", handle.AdminRmroomHandler)
+
     router.HandleFunc("/task", handle.TaskHandler)
     router.HandleFunc("/task/submitroom", handle.TaskRoomHandler)
 

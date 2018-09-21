@@ -6,19 +6,23 @@ insert({
 		"101": {
 			"status": "unchecked",
 			"group": 0,
-			"lamph": 0
+			"lamph": 0,
+			"probcat": [0],
+			"notes": ""
 		},
 		"104": {
 			"status": "unchecked",
 			"group": 0,
 			"lamph": {
-				"interactive": 0,
-				"standard": 0
-			}
+				"standard": 0,
+				"interactive": 0
+			},
+			"probcat": [0],
+			"notes": ""
 		}
     },
     "abrv": "N"
-}
+})
 
 USER
 
@@ -28,6 +32,57 @@ insert({
     "fname" : "Rory",
     "lname" : "Dudley",
     "type" : "admin",
-    "team" : 0,
-    ??? "group" : 0 ???
+    "group" : 0
 })
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------
+> db.buildings.update({name:"Nicarry"}, {$push: {"rooms.101.probcat": 5}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.buildings.find().pretty()
+{
+        "_id" : ObjectId("5ba477636899a8f13969bae4"),
+        "name" : "Nicarry",
+        "rooms" : {
+                "101" : {
+                        "status" : "unchecked",
+                        "group" : 0,
+                        "lamph" : 0,
+                        "probcat" : [
+                                0,
+                                5
+                        ],
+                        "notes" : ""
+                },
+                "104" : {
+                        "status" : "unchecked",
+                        "group" : 0,
+                        "lamph" : {
+                                "standard" : 0,
+                                "interactive" : 0
+                        },
+                        "probcat" : [
+                                0
+                        ],
+                        "notes" : ""
+                }
+        },
+        "abrv" : "N"
+}
+> db.buildings.update({name:"Nicarry"}, {$pop: {"rooms.101.probcat"}})
+2018-09-21T00:48:21.168-0400 E QUERY    [js] SyntaxError: missing : after property id @(shell):1:65
+> db.buildings.update({name:"Nicarry"}, {$pop: {"rooms.101.probcat": 5}})
+WriteResult({
+        "nMatched" : 0,
+        "nUpserted" : 0,
+        "nModified" : 0,
+        "writeError" : {
+                "code" : 9,
+                "errmsg" : "$pop expects 1 or -1, found: 5"
+        }
+})
+> db.buildings.update({name:"Nicarry"}, {$pop: {"rooms.101.probcat": 1}})

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Pooch Error</title>
+        <link rel="icon" type="image/png" href="http://{{ .IP }}:{{ .Port }}/public/img/corgo.png"/>
+        <link rel="stylesheet" type="text/css" href="http://{{ .IP }}:{{ .Port }}/public/css/admin.css"/>
+        <script>
+            alert("{{ .Msg }}");
+            window.location.replace("http://{{ .IP }}:{{ .Port }}/admin");
+        </script>
+    </head>
+</html>

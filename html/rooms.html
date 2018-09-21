@@ -28,7 +28,36 @@
         </div>
 
         <div id="content">
-            
+            {{ range $index, $data := .BdngData }}
+            {{ $data.Name }}
+                <table>
+                    <thead>
+                        <th>Room</th>
+                        <th>Status</th>
+                        <th>Group</th>
+                        <th>Lamp Hours</th>
+                        <th>Problems</th>
+                        <th>Notes</th>
+                    </thead>
+
+                    <tbody>
+                        {{ range $num, $info := $data.Rooms }}
+                        <tr>
+                                <td>{{ $data.Abrv }}{{ $num }}</td>
+                                <td>{{ $info.Status }}</td>
+                                <td>{{ $info.Group }}</td>
+                                <td>Standard: {{ $info.Lamph.Standard }}<br>Interactive: {{ $info.Lamph.Interactive }}</td>
+                                <td>
+                                    {{ range $place, $val := $info.Probcat }}
+                                        {{ $val }}, 
+                                    {{ end }}
+                                </td>
+                                <td>{{ $info.Notes }}</td>
+                        </tr>
+                        {{ end }}
+                    </tbody>
+                </table>
+            {{ end }}
         </div>
 
         <div id="footer">

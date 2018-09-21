@@ -26,9 +26,27 @@
                 </form>
             </div>
         </div>
+
+        <div id="content">
+            <h4>Users</h4>
+            <table>
+                <thead>
+                    <th>Username</th>
+                    <th>Name</th>
+                    <th>Account Type</th>
+                </thead>
+
+                <tbody>
+                    {{ range $index, $data := .Users }}
+                        <tr>
+                            <td>{{ $data.Username }}</td>
+                            <td>{{ $data.Fname }} {{ $data.Lname }}</td>
+                            <td>{{ $data.Type }}</td>
+                        </tr>
+                    {{ end }}
+                </tbody>
+            </table>
         </div>
-
-
 
         <div id="footer">
             <p class="github"><a href="https://github.com/pinecat/pooch">Github</a></p>

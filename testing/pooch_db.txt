@@ -71,3 +71,9 @@ insert({
 	},
 	"abrv": "N"
 })
+
+for _, data := range b {
+	for _, val := range data.Rooms {
+		fmt.Println(val.Notes)
+	}
+}
