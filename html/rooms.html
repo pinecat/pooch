@@ -5,6 +5,10 @@
         <title>Pooch</title>
         <link rel="icon" type="image/png" href="http://{{ .IP }}:{{ .Port }}/public/img/corgo.png"/>
         <link rel="stylesheet" type="text/css" href="http://{{ .IP }}:{{ .Port }}/public/css/rooms.css"/>
+
+        <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
+        <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
     </head>
 
     <body>
@@ -29,34 +33,36 @@
 
         <div id="content">
             {{ range $index, $data := .BdngData }}
-            {{ $data.Name }}
-                <table>
-                    <thead>
-                        <th>Room</th>
-                        <th>Status</th>
-                        <th>Group</th>
-                        <th>Lamp Hours</th>
-                        <th>Problems</th>
-                        <th>Notes</th>
-                    </thead>
+            <h3>{{ $data.Name }}</h3>
+                <div id="tableholder">
+                    <table id="{{ $data.Name }}" class="display">
+                        <thead>
+                            <th>Room</th>
+                            <th>Status</th>
+                            <th>Group</th>
+                            <th>Lamp Hours</th>
+                            <th>Problems</th>
+                            <th>Notes</th>
+                        </thead>
 
-                    <tbody>
-                        {{ range $num, $info := $data.Rooms }}
-                        <tr>
-                                <td>{{ $data.Abrv }}{{ $num }}</td>
-                                <td>{{ $info.Status }}</td>
-                                <td>{{ $info.Group }}</td>
-                                <td>Standard: {{ $info.Lamph.Standard }}<br>Interactive: {{ $info.Lamph.Interactive }}</td>
-                                <td>
-                                    {{ range $place, $val := $info.Probcat }}
-                                        {{ $val }}, 
-                                    {{ end }}
-                                </td>
-                                <td>{{ $info.Notes }}</td>
-                        </tr>
-                        {{ end }}
-                    </tbody>
-                </table>
+                        <tbody>
+                            {{ range $num, $info := $data.Rooms }}
+                            <tr>
+                                    <td>{{ $data.Abrv }}{{ $num }}</td>
+                                    <td>{{ $info.Status }}</td>
+                                    <td>{{ $info.Group }}</td>
+                                    <td>Standard: {{ $info.Lamph.Standard }}<br>Interactive: {{ $info.Lamph.Interactive }}</td>
+                                    <td>
+                                        {{ range $place, $val := $info.Probcat }}
+                                            {{ $val }},
+                                        {{ end }}
+                                    </td>
+                                    <td>{{ $info.Notes }}</td>
+                            </tr>
+                            {{ end }}
+                        </tbody>
+                    </table>
+                </div>
             {{ end }}
         </div>
 
@@ -65,5 +71,14 @@
             <p class="contact"><a href="mailto:dudleyr1@etown.edu">dudleyr1@etown.edu</a><br>Rory Dudley<br>pinecat</p>
             <p class ="copyright">Copyright &copy; Rory Dudley (aka pinecat)</p>
         </div>
+
+        <script>
+            {{ range $index, $data := .BdngData }}
+                $(document).ready(function() {
+                    $('#{{ $data.Name }}').DataTable();
+                });
+            {{ end }}
+        </script>
     </body>
+
 </html>
