@@ -160,7 +160,14 @@ func GetRooms() ([]Building, error) {
     return result, err
 }
 
-func UpdateGroup(building string, room string, group int) error {
-    err := DB.C("buildings").Update(bson.M{"name":building}, bson.M{"$set": bson.M{"rooms." + room + ".group": 0}})
+func UpdateUserGroup(username string, group string) error {
+    gr, _ := strconv.Atoi(group)
+    err := DB.C("users").Update(bson.M{"username":username}, bson.M{"$set": bson.M{"group": gr}})
+    return err
+}
+
+func UpdateBuildingGroup(building string, room string, group string) error {
+    gr, _ := strconv.Atoi(group)
+    err := DB.C("buildings").Update(bson.M{"name":building}, bson.M{"$set": bson.M{"rooms." + room + ".group": gr}})
     return err
 }

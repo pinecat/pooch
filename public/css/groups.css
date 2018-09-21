@@ -55,6 +55,48 @@
     display: inline;
 }
 
+#content {
+    overflow: scroll;
+}
+
+#content h3 {
+    background-color: #9b7528;
+    color: white;
+    border: 2px solid #9b7528;
+    border-radius: 4px;
+    padding-right: 10px;
+}
+
+#content #tableholder {
+    text-align: right;
+    margin-bottom: 120px;
+    width: 25%;
+    float: left;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+#content #tableholder input[type=text] {
+    text-align: right;
+    width: 50px;
+}
+
+#content #tableholder input[type=submit] {
+    padding: 10px;
+    border: 2px solid #9b7528;
+    border-radius: 4px;
+    margin: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    background-color: #9b7528;
+}
+
+#content #tableholder input[type=submit]:hover {
+    border: 2px solid #70551d;
+    background-color: #70551d;
+}
+
 #footer {
     background-color: #9b7528;
     clear: both;

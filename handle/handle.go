@@ -125,7 +125,7 @@ func AdminAddbuildingHandler(w http.ResponseWriter, r *http.Request) {
 
     b, _ := mgopooch.GetRooms()
     for _, data := range b {
-        if data.Name == name {
+        if data.Name == name || data.Abrv == abrv {
             disperr(w, "Building already exists!")
             return
         }
@@ -153,6 +153,10 @@ func AdminAddroomHandler(w http.ResponseWriter, r *http.Request) {
     num := r.FormValue("roomnum")
     proj := r.FormValue("projtype")
     group := r.FormValue("group")
+
+    if group == "" {
+        group = "0"
+    }
 
     b, _ := mgopooch.GetRooms()
 
@@ -184,10 +188,52 @@ func AdminRmroomHandler(w http.ResponseWriter, r *http.Request) {
     }
 }
 
+func AdminSaveusergroupsHandler(w http.ResponseWriter, r *http.Request) {
+    chadmin(w, r)
+
+    ul, _ := mgopooch.GetAllUsers()
+    for _, data := range ul {
+        newGroup := r.FormValue(data.Username + "group")
+        if newGroup != "" {
+            mgopooch.UpdateUserGroup(data.Username, newGroup)
+        }
+    }
+    http.Redirect(w, r, "/admin/groups", 302)
+}
+
+func AdminSaveroomgroupsHandler(w http.ResponseWriter, r *http.Request) {
+    chadmin(w, r)
+
+    b, _ := mgopooch.GetRooms()
+    for _, data := range b {
+        for num, _ := range data.Rooms {
+            newGroup := r.FormValue(data.Abrv + num + "group")
+            if newGroup != "" {
+                mgopooch.UpdateBuildingGroup(data.Name, num, newGroup)
+            }
+        }
+    }
+
+    http.Redirect(w, r, "/admin/groups", 302)
+}
+
 func TaskHandler(w http.ResponseWriter, r *http.Request) {
     u := chlogin(w, r)
     b, _ := mgopooch.GetRooms()
-    pd := PageData{IP: confrdr.PoochConf.IP, Port: confrdr.PoochConf.Port, UserData: u, BdngData: b}
+
+    assign := make([]mgopooch.Building, len(b))
+    for i := 0; i < len(b); i++ {
+        assign[i].Name = b[i].Name
+        assign[i].Abrv = b[i].Abrv
+        assign[i].Rooms = make(map[string]mgopooch.Room)
+        for num, info := range b[i].Rooms {
+            if u.Group == info.Group {
+                assign[i].Rooms[num] = info
+            }
+        }
+    }
+
+    pd := PageData{IP: confrdr.PoochConf.IP, Port: confrdr.PoochConf.Port, UserData: u, BdngData: assign}
 
     t, _ := template.ParseFiles("html/task.html")
     t.Execute(w, pd)
@@ -215,7 +261,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
         // make sure the password matches the hash in database
         if mgopooch.IsPassValid(password, &u) == true {
             set_session(username, w)
-            if u.Type == "reg" {
+            if u.Type == "regular" {
                 redirect_target = "/task"
             } else if u.Type == "admin" {
                 redirect_target = "/admin"

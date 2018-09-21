@@ -55,9 +55,124 @@
     display: inline;
 }
 
-#content #rbtns {
+#content {
+    overflow: scroll;
+    text-align: right;
+}
+
+#content h3 {
+    background-color: #9b7528;
+    color: white;
+    border: 2px solid #9b7528;
+    border-radius: 4px;
+    margin-top: -2px;
+    padding-right: 10px;
+}
+
+#content #selection {
+    width: 20%;
     float: left;
-    display: list-item;
+    margin: 10px;
+    border: 2px solid #9b7528;
+    border-radius: 4px;
+}
+
+#content #selection input[type=submit] {
+    margin: 10px;
+    width: 80%;
+    text-align: right;
+    padding-right: 10px;
+    font-weight: bold;
+    border: 2px solid #9b7528;
+    background-color: #9b7528;
+    color: white;
+    border-radius: 4px;
+}
+
+#content #selection input[type=submit]:hover {
+    border: 2px solid #70551d;
+    background-color: #70551d;
+}
+
+#content #formfill {
+    width: 50%;
+    float: left;
+    margin: 10px;
+    border: 2px solid #9b7528;
+    border-radius: 4px;
+    margin-bottom: 120px;
+}
+
+#content #formfill #roomselect {
+    border: 2px solid #9b7528;
+    border-radius: 4px;
+    text-align: right;
+    margin: 10px;
+    width: 15%;
+    padding-right: 3px;
+    font-weight: bold;
+}
+
+#content #formfill #smallinput {
+    border: 2px solid #9b7528;
+    border-radius: 4px;
+    text-align: right;
+    margin: 10px;
+    width: 50%;
+    height: 15px;
+    padding: 5px;
+}
+
+#content #formfill textarea {
+    border: 2px solid #9b7528;
+    border-radius: 4px;
+    margin: 10px;
+    width: 50%;
+    height: 100px;
+    padding: 5px;
+    vertical-align: text-top;
+    text-align: left;
+    resize: vertical;
+}
+
+#content #formfill input[type=submit] {
+    margin: 10px;
+    width: 52%;
+    text-align: right;
+    padding-right: 10px;
+    font-weight: bold;
+    border: 2px solid #9b7528;
+    background-color: #9b7528;
+    color: white;
+    border-radius: 4px;
+}
+
+#content #formfill input[type=submit]:hover {
+    border: 2px solid #70551d;
+    background-color: #70551d;
+}
+
+#content #problist {
+    width: 20%;
+    float: left;
+    margin: 10px;
+    border: 2px solid #9b7528;
+    border-radius: 4px;
+}
+
+#content #problist #problistformat {
+    font-weight: bold;
+    text-align: left;
+    margin: 10px;
+    padding-bottom: 120px;
+}
+
+#content #problist #problistformat h5 {
+    float: left;
+    padding: 2px;
+    margin: 2px;
+    border: 2px solid #9b7528;
+    border-radius: 4px;
 }
 
 #footer {

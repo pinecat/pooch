@@ -5,6 +5,10 @@
         <title>Pooch</title>
         <link rel="icon" type="image/png" href="http://{{ .IP }}:{{ .Port }}/public/img/corgo.png"/>
         <link rel="stylesheet" type="text/css" href="http://{{ .IP }}:{{ .Port }}/public/css/groups.css"/>
+
+        <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
+        <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
     </head>
 
     <body>
@@ -28,24 +32,59 @@
         </div>
 
         <div id="content">
-            <h4>Users</h4>
-            <table>
-                <thead>
-                    <th>Username</th>
-                    <th>Name</th>
-                    <th>Account Type</th>
-                </thead>
+            <div id="tableholder">
+                <h3>Users</h3>
+                <form action="/admin/saveusergroups" method="post">
+                    <table id="fancytable" class="display">
+                        <thead>
+                            <th>Username</th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Group</th>
+                        </thead>
 
-                <tbody>
-                    {{ range $index, $data := .Users }}
-                        <tr>
-                            <td>{{ $data.Username }}</td>
-                            <td>{{ $data.Fname }} {{ $data.Lname }}</td>
-                            <td>{{ $data.Type }}</td>
-                        </tr>
-                    {{ end }}
-                </tbody>
-            </table>
+                        <tbody>
+                            {{ range $index, $data := .Users }}
+                                <tr>
+                                    <td>{{ $data.Username }}</td>
+                                    <td>{{ $data.Fname }} {{ $data.Lname }}</td>
+                                    <td>{{ $data.Type }}</td>
+                                    <td><input type="text" name="{{ $data.Username }}group" placeholder="{{ $data.Group }}"></input></td>
+                                </tr>
+                            {{ end }}
+                        </tbody>
+                    </table>
+                    <br><input type="submit" value="Save User Groups"></input>
+                </form>
+            </div>
+
+            <div id="tableholder">
+                <h3>Rooms</h3>
+                <form action="/admin/saveroomgroups" method="post">
+                    <table id="alsofancytable" class="display">
+                        <thead>
+                            <th>Room</th>
+                            <th>Building</th>
+                            <th>Status</th>
+                            <th>Group</th>
+                        </thead>
+
+                        <tbody>
+                            {{ range $index, $data := .BdngData }}
+                                {{ range $num, $info := $data.Rooms }}
+                                    <tr>
+                                        <td>{{ $data.Abrv }}{{ $num }}</td>
+                                        <td>{{ $data.Name }}</td>
+                                        <td>{{ $info.Status }}</td>
+                                        <td><input type="text" name="{{ $data.Abrv }}{{ $num }}group" placeholder="{{ $info.Group }}"></input></td>
+                                    </tr>
+                                {{ end }}
+                            {{ end }}
+                        </tbody>
+                    </table>
+                    <br><input type="submit" value="Save Room Groups"></input>
+                </form>
+            </div>
         </div>
 
         <div id="footer">
@@ -53,5 +92,15 @@
             <p class="contact"><a href="mailto:dudleyr1@etown.edu">dudleyr1@etown.edu</a><br>Rory Dudley<br>pinecat</p>
             <p class ="copyright">Copyright &copy; Rory Dudley (aka pinecat)</p>
         </div>
+
+        <script>
+            $(document).ready(function() {
+                $('#fancytable').DataTable();
+            });
+
+            $(document).ready(function() {
+                $('#alsofancytable').DataTable();
+            });
+        </script>
     </body>
 </html>

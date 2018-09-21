@@ -25,15 +25,48 @@
         </div>
 
         <div id="content">
-            <div id="rbtns">
-                <input id="roomselect" type="text" placeholder="Select A Room" readonly></input>
+            <div id="selection">
+                <h3>Room Selection</h3>
                 {{ range $index, $data := .BdngData }}
                     {{ range $num, $info := $data.Rooms }}
-                        <input id="{{ $data.Abrv }}{{ $num }}" type="submit" value="{{ $data.Abrv }}{{ $num }}" onclick="rbtn(this)"></input>
+                        <input id="{{ $data.Abrv }}{{ $num }}" type="submit" value="{{ $data.Abrv }}{{ $num }}" onclick="rbtn(this)"></input><br>
                     {{ end }}
                 {{ end }}
             </div>
 
+            <div id="formfill">
+                <h3>Room Form</h3>
+                <form action="/task/submitroom" method="post">
+                    <input id="roomselect" type="text" name="roomselect" placeholder="Select A Room" readonly></input><br>
+                    <input id="smallinput" type="text" name="probcatlist" placeholder="problems (0, 1, 2, 3, ..., etc.)"></input><br>
+                    <input id="smallinput" type="text" name="lamphours" placeholder="lamp hours (standard, interactive)"></input><br>
+                    <textarea type="text" name="notes" placeholder="notes"></textarea><br>
+                    <input type="submit" value="Submit Room"></input>
+                </form>
+            </div>
+
+            <div id="problist">
+                <h3>Problem Categories</h3>
+                <div id="problistformat">
+                    <h5>01 - Restart computer<br></h5>
+                    <h5>02 - Check presenter's clicker<br></h5>
+                    <h5>03 - Press power on touch panel<br></h5>
+                    <h5>04 - Select computer as source<br></h5>
+                    <h5>05 - Make sure the projector turned on (and record lamp hours)<br></h5>
+                    <h5>06 - Visually inspect connections to projector<br></h5>
+                    <h5>07 - Test computer audio (is it loud enough)<br></h5>
+                    <h5>08 - Test volume on the control panel<br></h5>
+                    <h5>09 - Test internet connection of desktop<br></h5>
+                    <h5>10 - Test VGA audio and video<br></h5>
+                    <h5>11 - Select DVD player as source (test audio and video)<br></h5>
+                    <h5>12 - Test DVD controls on the touch panel (and check IR blaster)<br></h5>
+                    <h5>13 - Select Doc Cam as source (test bulbs, focus, and video output)<br></h5>
+                    <h5>14 - Check monitor arm for flexibility<br></h5>
+                    <h5>15 - Check the room and furniture for damage<br></h5>
+                    <h5>16 - Test the screen freeze (does it hold for more than 5 seconds)<br></h5>
+                    <h5>17 - Shut down the system<br></h5>
+                </div>
+            </div>
         </div>
 
         <div id="footer">

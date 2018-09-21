@@ -1,0 +1,40 @@
+{{ range $index, $data := .BdngData }}
+    {{ range $num, $info := $data.Rooms }}
+        <input id="{{ $data.Abrv }}{{ $num }}" type="submit" value="{{ $data.Abrv }}{{ $num }}" onclick="rbtn(this)"></input>
+    {{ end }}
+{{ end }}
+
+
+
+----------------------------------------------------------------------------------
+
+{{ range $index, $data := .BdngData }}
+    {{ range $num, $info := $data.Rooms }}
+        if ({{ $info.Group }} == {{ .UserData.Group }}) {
+            var btn = document.createElement("input");
+            btn.type = "submit";
+            btn.value = "{{ $data.Abrv }}{{ $num }}";
+            var elem = document.getElementById("content");
+            elem.appendChild(btn);
+        }
+    {{ end }}
+{{ end }}
+
+// var para = document.createElement("p");
+// var node = document.createTextNode("This is new.");
+// para.appendChild(node);
+//
+// var element = document.getElementById("div1");
+// element.appendChild(para);
+
+
+---------------------------------------------------------------------------------
+
+<div id="rbtns">
+    <input id="roomselect" type="text" placeholder="Select A Room" readonly></input>
+    {{ range $index, $data := .BdngData }}
+        {{ range $num, $info := $data.Rooms }}
+            <input id="{{ $data.Abrv }}{{ $num }}" type="submit" value="{{ $data.Abrv }}{{ $num }}" onclick="rbtn(this)"></input>
+        {{ end }}
+    {{ end }}
+</div>
