@@ -56,7 +56,9 @@
 }
 
 #content {
-    overflow: scroll;
+    overflow: auto;
+    width: 78%;
+    float: left;
 }
 
 #content h3 {
@@ -88,11 +90,51 @@
     padding: 10px;
 }
 
+#content #resetallrooms input[type=submit]:hover {
+    border: 2px solid #70551d;
+    background-color: #70551d;
+    color: red;
+    font-weigh: bold;
+}
+
 #content input[type=submit]:hover {
     border: 2px solid #70551d;
     background-color: #70551d;
     color: red;
     font-weigh: bold;
+}
+
+#problist {
+    width: 20%;
+    float: left;
+    margin: 10px;
+    border: 2px solid #9b7528;
+    border-radius: 4px;
+    margin-bottom: 120px;
+    margin-top: 19px;
+}
+
+#problist h3 {
+    background-color: #9b7528;
+    color: white;
+    border: 2px solid #9b7528;
+    border-radius: 4px;
+    margin-top: -2px;
+    padding-right: 10px;
+}
+
+#problist #problistformat {
+    font-weight: bold;
+    text-align: left;
+    margin: 10px;
+}
+
+#problist #problistformat h5 {
+    float: left;
+    padding: 2px;
+    margin: 2px;
+    border: 2px solid #9b7528;
+    border-radius: 4px;
 }
 
 #footer {
