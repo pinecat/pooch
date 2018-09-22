@@ -1,0 +1,4 @@
+{"_id":{"$oid":"5b91c3ac9e727213ab2c3573"},"username":"rory","password":"$2a$10$dfRn0Y19yYdlGpZmEO1.j.c5Bd3t9CDBCH.EH/u5X6fa71XCfTeWG","fname":"Rory","lname":"Dudley","type":"admin","group":0}
+{"_id":{"$oid":"5b922cf7f0a3bac0d9ab057a"},"username":"annie","password":"$2a$10$5zDWNkEPhC3Qi4EQe1Nl1e3gQy/RUksmHtnWMrXp/u03zK44NAmpu","fname":"Annie","lname":"Foster","type":"admin","group":0}
+{"_id":{"$oid":"5ba4d1f7bc3ac4f0437a92fe"},"username":"lauren","password":"$2a$10$tTGmk2GeqOvuo/vLTsnmN.3SY3k0kaoInrSInf6Kcj8susJ4IREfK","fname":"Lauren","lname":"Cugliotta","type":"regular","group":0}
+{"_id":{"$oid":"5ba4d2ecbc3ac4f0437a9347"},"username":"karen","password":"$2a$10$wf0mqWtWiT6ZJCr.NnYNI.FITNpfGhv.ISFzWOc6Wi4zhkpgwy8e6","fname":"Karen","lname":"Eatherton","type":"regular","group":0}

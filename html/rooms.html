@@ -43,6 +43,7 @@
                             <th>Lamp Hours</th>
                             <th>Problems</th>
                             <th>Notes</th>
+                            <th>Reset</th>
                         </thead>
 
                         <tbody>
@@ -58,12 +59,22 @@
                                         {{ end }}
                                     </td>
                                     <td>{{ $info.Notes }}</td>
+                                    <td>
+                                        <form action="/admin/resetindroom" action="post">
+                                            <input type="hidden" name="hiddenreset" value="{{ $data.Name }}.{{ $num }}">
+                                            <input type="submit" value="Reset"></input>
+                                        </form>
+                                    </td>
                             </tr>
                             {{ end }}
                         </tbody>
                     </table>
                 </div>
             {{ end }}
+
+            <form id="resetallrooms" action="/admin/resetrooms" method="post">
+                <input type="submit" value="Reset All Rooms"></input>
+            </form>
         </div>
 
         <div id="footer">

@@ -5,7 +5,6 @@ package handle
 import (
     _"fmt"
     "strings"
-    _"unicode"
     "strconv"
     "net/http"
     "html/template" // for setting up html files
@@ -112,6 +111,8 @@ func AdminRemoveuserHandler(w http.ResponseWriter, r *http.Request) {
         disperr(w, "Please enter the username of the user you would like to remove!", "/admin")
     } else if username == u.Username {
         disperr(w, "You may not remove your own account!", "/admin")
+    } else if username == "root" {
+        disperr(w, "You may not remove the root account!", "/admin")
     } else {
         err := mgopooch.RemoveUser(username)
         if err != nil {
@@ -222,6 +223,32 @@ func AdminSaveroomgroupsHandler(w http.ResponseWriter, r *http.Request) {
     http.Redirect(w, r, "/admin/groups", 302)
 }
 
+func AdminResetindroomHandler(w http.ResponseWriter, r *http.Request) {
+    chadmin(w, r)
+    resetinfo := r.FormValue("hiddenreset")
+    s := strings.Split(resetinfo, ".")
+    mgopooch.ResetRoom(s[0], s[1])
+    http.Redirect(w, r, "/admin/rooms", 302)
+}
+
+func AdminResetroomsHandler(w http.ResponseWriter, r *http.Request) {
+    chadmin(w, r)
+    mgopooch.ResetAllRooms()
+    http.Redirect(w, r, "/admin/rooms", 302)
+}
+
+func AdminResetusergroupsHandler(w http.ResponseWriter, r *http.Request) {
+    chadmin(w, r)
+    mgopooch.ResetAllUserGroups()
+    http.Redirect(w, r, "/admin/groups", 302)
+}
+
+func AdminResetroomgroupsHandler(w http.ResponseWriter, r *http.Request) {
+    chadmin(w, r)
+    mgopooch.ResetAllRoomGroups()
+    http.Redirect(w, r, "/admin/groups", 302)
+}
+
 func TaskHandler(w http.ResponseWriter, r *http.Request) {
     u := chlogin(w, r)
     b, _ := mgopooch.GetRooms()
@@ -281,6 +308,7 @@ func TaskRoomHandler(w http.ResponseWriter, r *http.Request) {
         s := strings.Split(lamph, ",")
         if len(s) == 1 {
             disperr(w, "Please enter lamphours for the interactive projector as well!", "/task")
+            return
         } else {
             room.Lamph.Standard, _ = strconv.Atoi(s[0])
             room.Lamph.Interactive, _ = strconv.Atoi(s[0])

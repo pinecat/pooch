@@ -176,3 +176,124 @@ func UpdateRoomStatus(building string, num string, room *Room) error {
     err := DB.C("buildings").Update(bson.M{"name":building}, bson.M{"$set": bson.M{"rooms." + num + "": room}})
     return err
 }
+
+func ResetAllUserGroups() error {
+    users, _ := GetAllUsers()
+    for index, _ := range users {
+        users[index].Group = 0
+    }
+
+    _, err := DB.C("users").RemoveAll(nil)
+    if err != nil {
+        log.Println(err)
+        return err
+    }
+
+    for _, data := range users {
+        err := DB.C("users").Insert(&data)
+        if err != nil {
+            log.Println(err)
+            return err
+        }
+    }
+
+    return nil
+}
+
+func ResetAllRoomGroups() error {
+    b, _ := GetRooms()
+
+    reset := make([]Building, len(b))
+
+    for index, data := range b {
+        reset[index].Name = data.Name
+        reset[index].Abrv = data.Abrv
+        reset[index].Rooms = make(map[string]Room)
+        for num, info := range data.Rooms {
+            var temp Room
+            temp.Status = info.Status
+            temp.Probcat = info.Probcat
+            temp.Notes = info.Notes
+            temp.Group = 0
+            temp.Lamph.Standard = info.Lamph.Interactive
+            if info.Lamph.Interactive != -1 {
+                temp.Lamph.Interactive = info.Lamph.Interactive
+            } else {
+                temp.Lamph.Interactive = -1
+            }
+            reset[index].Rooms[num] = temp
+        }
+    }
+
+    _, err := DB.C("buildings").RemoveAll(nil)
+    if err != nil {
+        log.Println(err)
+        return err
+    }
+
+    for _, data := range reset {
+        err := DB.C("buildings").Insert(&data)
+        if err != nil {
+            log.Println(err)
+            return err
+        }
+    }
+
+    return nil
+}
+
+func ResetRoom(bdngName string, num string) {
+    room, _ := GetRoom(bdngName, num)
+
+    reset := Room {Status: "unchecked", Probcat: []int{0}, Notes: "", Group: room.Group}
+    reset.Lamph.Standard = 0
+    if room.Lamph.Interactive != -1 {
+        reset.Lamph.Interactive = 0
+    } else {
+        reset.Lamph.Interactive = -1
+    }
+
+    UpdateRoomStatus(bdngName, num, &reset)
+}
+
+func ResetAllRooms() error{
+    b, _ := GetRooms()
+
+    reset := make([]Building, len(b))
+
+    for index, data := range b {
+        reset[index].Name = data.Name
+        reset[index].Abrv = data.Abrv
+        reset[index].Rooms = make(map[string]Room)
+        for num, info := range data.Rooms {
+            var temp Room
+            temp.Status = "unchecked"
+            temp.Probcat = []int{0}
+            temp.Notes = ""
+            temp.Group = info.Group
+            temp.Lamph.Standard = 0
+            if info.Lamph.Interactive != -1 {
+                temp.Lamph.Interactive = 0
+            } else {
+                temp.Lamph.Interactive = -1
+            }
+            reset[index].Rooms[num] = temp
+        }
+    }
+
+    _, err := DB.C("buildings").RemoveAll(nil)
+    if err != nil {
+        log.Println(err)
+        return err
+    }
+
+    for _, data := range reset {
+        err := DB.C("buildings").Insert(&data)
+        if err != nil {
+            log.Println(err)
+            return err
+        }
+    }
+
+    return nil
+}

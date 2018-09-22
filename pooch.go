@@ -47,6 +47,10 @@ func main() {
     router.HandleFunc("/admin/rmroom", handle.AdminRmroomHandler)
     router.HandleFunc("/admin/saveusergroups", handle.AdminSaveusergroupsHandler)
     router.HandleFunc("/admin/saveroomgroups", handle.AdminSaveroomgroupsHandler)
+    router.HandleFunc("/admin/resetrooms", handle.AdminResetroomsHandler)
+    router.HandleFunc("/admin/resetindroom", handle.AdminResetindroomHandler)
+    router.HandleFunc("/admin/resetusergroups", handle.AdminResetusergroupsHandler)
+    router.HandleFunc("/admin/resetroomgroups", handle.AdminResetroomgroupsHandler)
 
     router.HandleFunc("/task", handle.TaskHandler)
     router.HandleFunc("/task/submitroom", handle.TaskRoomHandler)

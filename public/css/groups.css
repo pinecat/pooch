@@ -65,12 +65,13 @@
     border: 2px solid #9b7528;
     border-radius: 4px;
     padding-right: 10px;
+    width: 100%;
 }
 
 #content #tableholder {
     text-align: right;
     margin-bottom: 120px;
-    width: 25%;
+    width: 45%;
     float: left;
     margin-left: 20px;
     margin-right: 20px;
@@ -90,11 +91,24 @@
     font-weight: bold;
     color: white;
     background-color: #9b7528;
+    margin-bottom: 120px;
 }
 
 #content #tableholder input[type=submit]:hover {
     border: 2px solid #70551d;
     background-color: #70551d;
+}
+
+#content #resetform {
+    float: left;
+    margin-top: -169px;
+}
+
+#content #resetform input[type=submit]:hover {
+    border: 2px solid #70551d;
+    background-color: #70551d;
+    color: red;
+    font-weigh: bold;
 }
 
 #footer {
