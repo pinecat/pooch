@@ -31,8 +31,13 @@
                     <form action="/admin/groups" method="post">
                         <input type="submit" value="View Groups"><br>
                     </form>
+                    <form action="/admin/totask" method="post">
+                        <input type="submit" value="View Task Mode"><br>
+                    </form>
                 </div>
+            </div>
 
+            <div id="row2">
                 <div id="userop">
                     <h4>Create User</h4>
                     <form action="/admin/createuser" method="post">
@@ -56,9 +61,18 @@
                         <input type="submit" value="Submit"><br>
                     </form>
                 </div>
+
+                <div id="userop">
+                    <h4>Change User Password</h4>
+                    <form action="/admin/chpswd" method="post">
+                        <input type="text" name="chusername" placeholder="username"><br>
+                        <input type="password" name="chpassword" placeholder="password"><br>
+                        <input type="submit" value="Submit"><br>
+                    </form>
+                </div>
             </div>
 
-            <div id="row2">
+            <div id="row3">
                 <div id="roomop">
                     <h4>Add Building</h4>
                     <form action="/admin/addbdng" method="post">
@@ -89,7 +103,7 @@
                 </div>
             </div>
 
-            <div id="row3">
+            <div id="row4">
                 <div id="roomop">
                     <h4>Remove Building</h4>
                     <form action="/admin/rmbdng" method="post">

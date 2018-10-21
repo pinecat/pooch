@@ -44,33 +44,39 @@
                             <th>Problems</th>
                             <th>Notes</th>
                             <th>Reset</th>
+                            <th>Last Checked<th>
                         </thead>
 
                         <tbody>
                             {{ range $num, $info := $data.Rooms }}
                             <tr>
-                                    <td>{{ $data.Abrv }}{{ $num }}</td>
-                                    <td>{{ $info.Status }}</td>
-                                    <td>{{ $info.Group }}</td>
-                                    <td>Standard: {{ $info.Lamph.Standard }}<br>Interactive: {{ $info.Lamph.Interactive }}</td>
-                                    <td>
+                                    <td align="center">{{ $data.Abrv }}{{ $num }}</td>
+                                    <td align="center">{{ $info.Status }}</td>
+                                    <td align="center">{{ $info.Group }}</td>
+                                    <td align="center">Standard: {{ $info.Lamph.Standard }}<br>Interactive: {{ $info.Lamph.Interactive }}</td>
+                                    <td align="left">
                                         {{ range $place, $val := $info.Probcat }}
                                             {{ $val }},
                                         {{ end }}
                                     </td>
-                                    <td>{{ $info.Notes }}</td>
-                                    <td>
+                                    <td align="left">{{ $info.Notes }}</td>
+                                    <td align="center">
                                         <form action="/admin/resetindroom" action="post">
                                             <input type="hidden" name="hiddenreset" value="{{ $data.Name }}.{{ $num }}">
                                             <input type="submit" value="Reset"></input>
                                         </form>
                                     </td>
+                                    <td align="center">{{ $info.Last }}</td>
                             </tr>
                             {{ end }}
                         </tbody>
                     </table>
                 </div>
             {{ end }}
+
+            <form id="exportcsv" action="/admin/exportcsv" method="post">
+                <input type="submit" value="Export CSV"></input>
+            </form>
 
             <form id="resetallrooms" action="/admin/resetrooms" method="post">
                 <input type="submit" value="Reset All Rooms"></input>

@@ -11,6 +11,8 @@ import (
     "github.com/pinecat/pooch/confrdr"
     "strconv"
     "errors"
+    "encoding/csv"
+    "os"
 )
 
 /* structs */
@@ -41,6 +43,7 @@ type Room struct {
     Lamph   Projector
     Probcat []int
     Notes   string
+    Last    string
 }
 
 type Projector struct {
@@ -93,6 +96,12 @@ func InsertUser(user *User) error {
     return err
 }
 
+func UpdatePassword(username string, password string) error {
+    hash, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+    err := DB.C("users").Update(bson.M{"username":username}, bson.M{"$set": bson.M{"password": string(hash)}})
+    return err
+}
+
 func RemoveUser(username string) error {
     err := DB.C("users").Remove(bson.M{"username":username})
     return err
@@ -109,7 +118,7 @@ func RemoveBuilding(name string) error {
     return err
 }
 
-func InsertRoom(name string, num string, proj string, group string) error {
+func InsertRoom(name string, num string, proj string, group string, lastchecked string) error {
     var r Room
     if proj == "stanplusinter" {
         r.Lamph.Interactive = 0;
@@ -120,6 +129,7 @@ func InsertRoom(name string, num string, proj string, group string) error {
     r.Group, _ = strconv.Atoi(group)
     r.Probcat = []int{0}
     r.Notes = ""
+    r.Last = lastchecked
     err := DB.C("buildings").Update(bson.M{"name":name}, bson.M{"$set": bson.M{"rooms." + num + "": r}})
     return err
 }
@@ -200,6 +210,73 @@ func ResetAllUserGroups() error {
     return nil
 }
 
+func Export2CSV() error {
+    file, err := os.Create("public/roomdata.csv")
+    if err != nil {
+        return err
+    }
+    defer file.Close()
+
+    b, _ := GetRooms()
+
+    writer := csv.NewWriter(file)
+    defer writer.Flush()
+
+    for _, value := range b {
+        data := []string{value.Name, "Status", "Group", "Lamp Hours", "Problem Categories", "Notes", "Last Checked"}
+        err = writer.Write(data)
+        if err != nil {
+            return err
+        }
+        for index, info := range value.Rooms {
+            var lamph string
+            var probcat string
+
+            lamph += strconv.Itoa(info.Lamph.Standard) + ", "
+            lamph += strconv.Itoa(info.Lamph.Interactive)
+
+            for i := 0; i < len(info.Probcat); i++ {
+                probcat += strconv.Itoa(info.Probcat[i])
+                if i != len(info.Probcat) - 1 {
+                    probcat += ", "
+                }
+            }
+
+            data = []string{index, info.Status, strconv.Itoa(info.Group), lamph, probcat, info.Notes, info.Last}
+            err = writer.Write(data)
+            if err != nil {
+                return err
+            }
+        }
+
+        err = writer.Write([]string{""})
+        if err != nil {
+            return err
+        }
+    }
+
+    writer.Write([]string{"Problem Category Key", "Description"})
+    writer.Write([]string{"1", "Restart computer"})
+    writer.Write([]string{"2", "Checker presenter's clicker"})
+    writer.Write([]string{"3", "Press power on touch panel"})
+    writer.Write([]string{"4", "Select computer as source"})
+    writer.Write([]string{"5", "Make sure the projector turned on (and record lamp hours)"})
+    writer.Write([]string{"6", "Visually inspect connects to projector"})
+    writer.Write([]string{"7", "Test computer audio (is it loud enough)"})
+    writer.Write([]string{"8", "Test volume on the control panel"})
+    writer.Write([]string{"9", "Test internet connection of desktop"})
+    writer.Write([]string{"10", "Test VGA audio and video"})
+    writer.Write([]string{"11", "Select DVD player as source (test audio and video)"})
+    writer.Write([]string{"12", "Test DVD controls on the touch panel (and check IR blaster)"})
+    writer.Write([]string{"13", "Selec Doc Cam as source (test bulbs, focus, and video output)"})
+    writer.Write([]string{"14", "Check monitor arm for flexibility"})
+    writer.Write([]string{"15", "Check the room and furniture for damage"})
+    writer.Write([]string{"16", "Test the screen freeze (does it hold for more than 5 seconds)"})
+    writer.Write([]string{"17", "Shut down the system"})
+
+    return nil
+}
+
 func ResetAllRoomGroups() error {
     b, _ := GetRooms()
 
@@ -215,6 +292,7 @@ func ResetAllRoomGroups() error {
             temp.Probcat = info.Probcat
             temp.Notes = info.Notes
             temp.Group = 0
+            temp.Last = info.Last
             temp.Lamph.Standard = info.Lamph.Interactive
             if info.Lamph.Interactive != -1 {
                 temp.Lamph.Interactive = info.Lamph.Interactive
@@ -245,7 +323,7 @@ func ResetAllRoomGroups() error {
 func ResetRoom(bdngName string, num string) {
     room, _ := GetRoom(bdngName, num)
 
-    reset := Room {Status: "unchecked", Probcat: []int{0}, Notes: "", Group: room.Group}
+    reset := Room {Status: "unchecked", Probcat: []int{0}, Notes: "", Group: room.Group, Last: room.Last}
     reset.Lamph.Standard = 0
     if room.Lamph.Interactive != -1 {
         reset.Lamph.Interactive = 0
@@ -271,6 +349,7 @@ func ResetAllRooms() error{
             temp.Probcat = []int{0}
             temp.Notes = ""
             temp.Group = info.Group
+            temp.Last = info.Last
             temp.Lamph.Standard = 0
             if info.Lamph.Interactive != -1 {
                 temp.Lamph.Interactive = 0

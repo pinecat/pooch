@@ -80,6 +80,21 @@
     border-radius: 4px;
 }
 
+#content #exportcsv input[type=submit] {
+    width: 100%;
+    margin-bottom: 30px;
+    border: 2px solid #9b7528;
+    background-color: #9b7528;
+    color: white;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+#content #exportcsv input[type=submit]:hover {
+    border: 2px solid #70551d;
+    background-color: #70551d;
+}
+
 #content #resetallrooms input[type=submit] {
     width: 100%;
     margin-bottom: 120px;
@@ -94,7 +109,7 @@
     border: 2px solid #70551d;
     background-color: #70551d;
     color: red;
-    font-weigh: bold;
+    font-weight: bold;
 }
 
 #content input[type=submit]:hover {

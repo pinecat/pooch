@@ -4,6 +4,7 @@ package handle
 /* imports */
 import (
     _"fmt"
+    "time"
     "strings"
     "strconv"
     "net/http"
@@ -109,14 +110,41 @@ func AdminRemoveuserHandler(w http.ResponseWriter, r *http.Request) {
 
     if username == "" {
         disperr(w, "Please enter the username of the user you would like to remove!", "/admin")
+        return
     } else if username == u.Username {
         disperr(w, "You may not remove your own account!", "/admin")
+        return
     } else if username == "root" {
         disperr(w, "You may not remove the root account!", "/admin")
+        return
     } else {
         err := mgopooch.RemoveUser(username)
         if err != nil {
             disperr(w, "Could not remove user!  Are you sure the user exists?", "/admin")
+            return
+        } else {
+            http.Redirect(w, r, "/admin", 302)
+        }
+    }
+}
+
+func AdminChangeuserpasswordHandler(w http.ResponseWriter, r *http.Request) {
+    chadmin(w, r)
+
+    username := r.FormValue("chusername")
+    password := r.FormValue("chpassword")
+
+    if username == "" {
+        disperr(w, "Please enter the username of the user you would like to update the password for!", "/admin")
+        return
+    } else if password == "" {
+        disperr(w, "Please enter a password to update to!", "/admin")
+        return
+    } else {
+        err := mgopooch.UpdatePassword(username, password)
+        if err != nil {
+            disperr(w, "Could not update user password!  Are you sure the user exists?", "/admin")
+            return
         } else {
             http.Redirect(w, r, "/admin", 302)
         }
@@ -176,7 +204,7 @@ func AdminAddroomHandler(w http.ResponseWriter, r *http.Request) {
             }
         }
     }
-    mgopooch.InsertRoom(name, num, proj, group)
+    mgopooch.InsertRoom(name, num, proj, group, "never checked")
     http.Redirect(w, r, "/admin", 302)
 }
 
@@ -223,6 +251,13 @@ func AdminSaveroomgroupsHandler(w http.ResponseWriter, r *http.Request) {
     http.Redirect(w, r, "/admin/groups", 302)
 }
 
+func AdminRoomsCSVHandler(w http.ResponseWriter, r *http.Request) {
+    chadmin(w, r)
+    mgopooch.Export2CSV()
+    http.Redirect(w, r, "/public/roomdata.csv", 302)
+    http.Redirect(w, r, "/admin/rooms", 302)
+}
+
 func AdminResetindroomHandler(w http.ResponseWriter, r *http.Request) {
     chadmin(w, r)
     resetinfo := r.FormValue("hiddenreset")
@@ -247,6 +282,11 @@ func AdminResetroomgroupsHandler(w http.ResponseWriter, r *http.Request) {
     chadmin(w, r)
     mgopooch.ResetAllRoomGroups()
     http.Redirect(w, r, "/admin/groups", 302)
+}
+
+func AdminTotaskHandler(w http.ResponseWriter, r *http.Request) {
+    chadmin(w, r)
+    http.Redirect(w, r, "/task", 302)
 }
 
 func TaskHandler(w http.ResponseWriter, r *http.Request) {
@@ -280,6 +320,7 @@ func TaskRoomHandler(w http.ResponseWriter, r *http.Request) {
     notes := r.FormValue("notes")
     if roomselect == "" {
         disperr(w, "Please select a room to submit!", "/task")
+        return
     }
 
     var abrv string = ""
@@ -303,6 +344,7 @@ func TaskRoomHandler(w http.ResponseWriter, r *http.Request) {
     room, _ := mgopooch.GetRoom(bdngName, roomnum)
     if lamph == "" {
         disperr(w, "Please enter lamphours for the room!", "/task")
+        return
     }
     if room.Lamph.Interactive != -1 {
         s := strings.Split(lamph, ",")
@@ -314,7 +356,8 @@ func TaskRoomHandler(w http.ResponseWriter, r *http.Request) {
             room.Lamph.Interactive, _ = strconv.Atoi(s[0])
         }
     } else {
-        room.Lamph.Standard, _ = strconv.Atoi(lamph)
+        s := strings.Split(lamph, ",")
+        room.Lamph.Standard, _ = strconv.Atoi(s[0])
     }
 
     var problems []int
@@ -330,6 +373,7 @@ func TaskRoomHandler(w http.ResponseWriter, r *http.Request) {
 
     room.Status = "checked"
     room.Notes = notes;
+    room.Last = time.Now().Format("2006-01-02 15:04:05")
 
     mgopooch.UpdateRoomStatus(bdngName, roomnum, &room)
 

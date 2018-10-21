@@ -1,4 +1,2 @@
-{"_id":{"$oid":"5ba5b4dabc3ac4f0437aa0e2"},"username":"root","password":"$2a$10$RRDrJKL83fJQFV2ReE5wyuZA6rKuT6wKCQkqaHwK8HIHzhd15ywTC","fname":"Root","lname":"User","type":"admin","group":0}
-{"_id":{"$oid":"5ba9bc2fbc3ac4f0437aa6cf"},"username":"dudleyr1@etown.edu","password":"$2a$10$xBk7SuH4ZMmEowdCh.ILdOUkRtPGthPEW2VAsfjAXy6AvPlXAZ5ay","fname":"Rory","lname":"Dudley","type":"admin","group":0}
-{"_id":{"$oid":"5ba9bc3abc3ac4f0437aa6d5"},"username":"fostera@etown.edu","password":"$2a$10$iofYKaBVzX8ZKV35JJdZwOIK9rzkfOwDKFNz7IuHRgmzzHWC715zq","fname":"Annie","lname":"Foster","type":"admin","group":0}
-{"_id":{"$oid":"5ba9bc46bc3ac4f0437aa6d9"},"username":"helmb@etown.edu","password":"$2a$10$wGOav0lGkVTEt/5Zwn1wZegxP0V0Zpm.vn/K605Px0J700xvx1X3u","fname":"Brian","lname":"Helm","type":"regular","group":0}
+{"_id":{"$oid":"5ba5b4dabc3ac4f0437aa0e2"},"username":"root","password":"$2a$10$Pkh7Y2iNnJ6wzhNFkWmCPeDS1Z1Ro1/NJYuqOBZ.C4Ibn1h4Byo7K","fname":"Root","lname":"User","type":"admin","group":0}
+{"_id":{"$oid":"5ba9bc2fbc3ac4f0437aa6cf"},"username":"dudleyr1@etown.edu","password":"$2a$10$FtHNbybXUDspKdm58sbq/exkoK8Ztbc5MufApIqPK1sXRv0qIIoxG","fname":"Rory","lname":"Dudley","type":"admin","group":0}
