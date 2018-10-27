@@ -180,6 +180,10 @@ func AdminRmbuildingHandler(w http.ResponseWriter, r *http.Request) {
     chadmin(w, r)
 
     name := r.FormValue("bdngname")
+    if name == "" {
+        disperr(w, "Please select a building to remove!", "/admin")
+        return
+    }
     err := mgopooch.RemoveBuilding(name)
     if err != nil {
         disperr(w, "Could not remove building!  Are you sure the building exists?", "/admin")
@@ -232,6 +236,14 @@ func AdminRmroomHandler(w http.ResponseWriter, r *http.Request) {
 
     name := r.FormValue("bdngname")
     num := r.FormValue("roomnum")
+
+    if name == "" {
+        disperr(w, "Please enter the name of the building which the room you are trying to remove is in!", "/admin")
+        return
+    } else if num == "" {
+        disperr(w, "Please enter the room number of the room you are trying to remove!", "/admin")
+        return
+    }
 
     err := mgopooch.RemoveRoom(name, num)
     if err != nil {
