@@ -293,7 +293,7 @@ func ResetAllRoomGroups() error {
             temp.Notes = info.Notes
             temp.Group = 0
             temp.Last = info.Last
-            temp.Lamph.Standard = info.Lamph.Interactive
+            temp.Lamph.Standard = info.Lamph.Standard
             if info.Lamph.Interactive != -1 {
                 temp.Lamph.Interactive = info.Lamph.Interactive
             } else {
