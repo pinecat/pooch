@@ -157,6 +157,14 @@ func AdminAddbuildingHandler(w http.ResponseWriter, r *http.Request) {
     name := r.FormValue("bdngname")
     abrv := r.FormValue("bdngabrv")
 
+    if name == "" {
+        disperr(w, "Please enter the name of the building you'd like to add!", "/admin")
+        return
+    } else if abrv == "" {
+        disperr(w, "Please enter the abbreviation of the building name you'd like to add!", "/admin")
+        return
+    }
+
     b, _ := mgopooch.GetRooms()
     for _, data := range b {
         if data.Name == name || data.Abrv == abrv {
@@ -187,6 +195,17 @@ func AdminAddroomHandler(w http.ResponseWriter, r *http.Request) {
     num := r.FormValue("roomnum")
     proj := r.FormValue("projtype")
     group := r.FormValue("group")
+
+    if name == "" {
+        disperr(w, "Please select a building to add a room to!", "/admin")
+        return
+    } else if num == "" {
+        disperr(w, "Please enter the room number of the room you are trying to add!", "/admin")
+        return
+    } else if proj == "" {
+        disperr(w, "Please select a projector type!", "/admin")
+        return
+    }
 
     if group == "" {
         group = "0"
