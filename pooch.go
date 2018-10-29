@@ -10,8 +10,9 @@ package main
 
 /* imports */
 import (
-    _"fmt" // for printing out text
+    "fmt" // for printing out text
     "log" // for logging errors
+    "os" // for getting cmdline args
     "net/http" // for hosting webapp server
     "github.com/gorilla/mux" // gorilla mux router for handling funcs
     "github.com/pinecat/pooch/mgopooch"
@@ -22,6 +23,19 @@ import (
 /* globals */
 var router = mux.NewRouter()
 
+func help() {
+    fmt.Printf("POOCH\n")
+    fmt.Printf("\tThe friendly podium check helper.  Web app to help with podium checks at Elizabethtown College.\n\n")
+    fmt.Printf("USAGE\n")
+    fmt.Printf("\tUsage: pooch [-f filepath | -h]\n\n")
+    fmt.Printf("OPTIONS\n")
+    fmt.Printf("\t-f: specify the filepath of the config file (\"./pooch.conf\" by default)\n")
+    fmt.Printf("\t-h: this menu\n\n")
+    fmt.Printf("AUTHOR\n")
+    fmt.Printf("\tRory Dudley (aka pinecat: https://github.com/pinecat/pooch)\n\n")
+    fmt.Printf("EOF\n")
+}
+
 /*
     main:       main function of the program
 
@@ -30,7 +44,18 @@ var router = mux.NewRouter()
     returns:    void
 */
 func main() {
-    confrdr.ReadConfFile("pooch.conf")
+    filepath := "pooch.conf"
+    if len(os.Args) == 3 && os.Args[1] == "-f" { // read in different filepath if specified by user at cmdline
+        filepath = os.Args[2] // update the filepath
+    } else if len(os.Args) > 1 && os.Args[1] == "-f" { // if format for -f flag is not correct...
+        fmt.Printf("Usage: %s [-f filepath | -h]\n", os.Args[0]) // print a usage message
+        return // and exit the program
+    } else if len(os.Args) > 1 && os.Args[1] == "-h" { // if flag is -h...
+        help() // ...print a help menu
+        return // and exit the program
+    }
+
+    confrdr.ReadConfFile(filepath)
     mgopooch.SetupSession()
 
     router.HandleFunc("/", handle.IndexHandler) // handle the index page
