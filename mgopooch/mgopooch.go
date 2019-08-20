@@ -6,8 +6,8 @@ import (
     _"fmt"
     "log"
     "golang.org/x/crypto/bcrypt" // for hashing passwords
-    "labix.org/v2/mgo"
-    "labix.org/v2/mgo/bson"
+    "gopkg.in/mgo.v2"
+    "gopkg.in/mgo.v2/bson"
     "github.com/pinecat/pooch/confrdr"
     "strconv"
     "errors"
