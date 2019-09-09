@@ -1,0 +1,54 @@
+﻿html {
+    min-height: 100%;
+    position: relative;
+}
+
+body {
+    height: 100%;
+    background: #4d5061;
+    font-family: 'Cairo', sans-serif;
+    overflow: hidden;
+}
+
+.nav {
+    background: #5c80bc;
+    width: 180px;
+    height: 100%;
+    margin-right: 30px;
+    border-radius: 0px 5px 5px 0px;
+    padding: 0px 20px 0px 20px;
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+.nav img {
+    width: 90px;
+    height: 80px;
+    float: left;
+}
+
+.nav h3 {
+    font-family: 'Abril Fatface', cursive;
+    margin-top: 36px;
+    margin-right: 30px;
+    color: #edebd7;
+}
+
+.content h1 {
+    font-family: 'Abril Fatface', cursive;
+}
+
+/*
+    yellow/brown: #e3b23c
+    eggshell white: #edebd7
+    gray: #4d5061
+    blue: #5c80bc
+    red: #ff3c38
+    msu (dark blue) green: #104547
+    ufo green: #23ce6b
+*/
