@@ -1,6 +1,0 @@
-<h1>pooch admin</h1>
-<hr>
-<small>Welcome {{ .Fname }} {{ .Lname }}!</small>
-<form method="post" action="/logout">
-    <button type="submit">Logout</button>
-</form>
