@@ -1,18 +1,26 @@
-﻿html {
+﻿/**************
+* Entire page *
+**************/
+
+html {
     min-height: 100%;
     position: relative;
 }
 
 body {
     height: 100%;
-    background: #4d5061;
+    background: #edebd7;
     font-family: 'Cairo', sans-serif;
     overflow: hidden;
 }
 
+/***************************
+* _Layout (template) & nav *
+***************************/
+
 .nav {
-    background: #5c80bc;
-    width: 180px;
+    background: #4d5061;
+    width: 250px;
     height: 100%;
     margin-right: 30px;
     border-radius: 0px 5px 5px 0px;
@@ -29,7 +37,6 @@ body {
 .nav img {
     width: 90px;
     height: 80px;
-    float: left;
 }
 
 .nav h3 {
@@ -39,9 +46,75 @@ body {
     color: #edebd7;
 }
 
-.content h1 {
-    font-family: 'Abril Fatface', cursive;
+.nav .title {
+    display: flex;
+    justify-content: center;
 }
+
+.nav links {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.nav a {
+    text-decoration: none;
+    color: #edebd7;
+    font-family: 'Cairo', sans-serif;
+    width: 250px;
+}
+
+.content {
+    margin-left: 290px;
+    text-align: center;
+}
+
+/********
+* index *
+********/
+
+.index-content h1 {
+    font-family: 'Abril Fatface', cursive;
+    color: #4d5061;
+}
+
+.index-content img {
+    width: 300px;
+    height: 250px;
+    margin-bottom: -80px;
+}
+
+.index-content input[type=text] {
+    width: 300px;
+    height: 40px;
+    margin: 5px;
+    border-radius: 10px;
+    border-width: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: medium;
+    font-family: 'Cairo', sans-serif;
+}
+
+.index-content input[type=submit] {
+    width: 320px;
+    height: 40px;
+    margin: 5px;
+    border-radius: 10px;
+    border-width: 0px;
+    font-size: medium;
+    background: #4d5061;
+    color: #edebd7;
+    font-family: 'Cairo', sans-serif;
+}
+
+.index-content input[type=submit]:hover {
+    background: #23ce6b;
+}
+
+/*********
+* colors *
+*********/
 
 /*
     yellow/brown: #e3b23c
