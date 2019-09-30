@@ -96,6 +96,18 @@ body {
     font-family: 'Cairo', sans-serif;
 }
 
+.index-content input[type=password] {
+    width: 300px;
+    height: 40px;
+    margin: 5px;
+    border-radius: 10px;
+    border-width: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: medium;
+    font-family: 'Cairo', sans-serif;
+}
+
 .index-content input[type=submit] {
     width: 320px;
     height: 40px;

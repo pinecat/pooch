@@ -1,13 +1,22 @@
-﻿@{
+﻿@model pooch.Models.User
+
+@{
     ViewData["Title"] = "| Home";
 }
 
 <div class="index-content">
     <img src="~/corgo.png" />
     <h1>Welcome to Pooch</h1>
+    <!--
     <form>
         <input type="text" name="username" placeholder="Username" /><br />
         <input type="text" name="password" placeholder="Password" /><br />
+        <input type="submit" value="Login" />
+    </form>
+    -->
+    <form method="post">
+        @Html.TextBoxFor(u => u.Username, new { placeholder = "Username" } ) <br />
+        @Html.PasswordFor(u => u.Password, new { placeholder = "Password" } ) <br />
         <input type="submit" value="Login" />
     </form>
 </div>

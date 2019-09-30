@@ -52,11 +52,13 @@ namespace pooch
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            /* https://stackoverflow.com/questions/40005538/hiding-controller-name-from-url */
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    name: "root",
+                    template: "{action}/{id?}",
+                    defaults: new { controller = "Home", action = "Index" });
             });
         }
     }
